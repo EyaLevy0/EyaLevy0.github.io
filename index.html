@@ -13,7 +13,7 @@
       --bg: #0d0e12;
       --card-bg: #14161d;
       --card-border: #232734;
-      --accent-green: #00ff87;
+      --accent-main: #ff2a2a; /* Bold Red */
       --accent-purple: #9d4edd;
       --accent-blue: #00d2ff;
       --text-main: #e2e8f0;
@@ -44,13 +44,22 @@
     }
 
     .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       font-family: var(--font-mono);
       font-size: 0.9rem;
       color: var(--text-muted);
       letter-spacing: 1px;
     }
 
-    .brand b { color: var(--accent-green); }
+    .brand svg {
+      fill: var(--accent-main);
+      width: 22px;
+      height: 22px;
+    }
+
+    .brand b { color: var(--accent-main); }
 
     nav a {
       color: var(--text-muted);
@@ -61,7 +70,7 @@
       transition: color 0.2s;
     }
 
-    nav a:hover { color: var(--accent-green); }
+    nav a:hover { color: var(--accent-main); }
 
     .hero {
       margin-bottom: 3.5rem;
@@ -69,7 +78,7 @@
 
     .hero span {
       font-family: var(--font-mono);
-      color: var(--accent-green);
+      color: var(--accent-main);
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 2px;
@@ -117,13 +126,13 @@
 
     .card:hover {
       transform: translateY(-4px);
-      border-color: var(--accent-green);
+      border-color: var(--accent-main);
     }
 
     .card-tag {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--accent-green);
+      color: var(--accent-main);
       letter-spacing: 1px;
       margin-bottom: 0.75rem;
       display: block;
@@ -167,7 +176,7 @@
     .btn-enter {
       font-family: var(--font-mono);
       font-size: 0.85rem;
-      color: var(--accent-green);
+      color: var(--accent-main);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -183,7 +192,226 @@
 
     .about-section h3 {
       font-family: var(--font-mono);
-      color: var(--accent-green);
+      color: var(--accent-main);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-section h4 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-section p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Optimization Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0d0e12;
+      --card-bg: #14161d;
+      --card-border: #232734;
+      --accent-main: #ff2a2a; /* Bold Red */
+      --accent-purple: #9d4edd;
+      --accent-blue: #00d2ff;
+      --text-main: #e2e8f0;
+      --text-muted: #8a94a6;
+      --font-mono: 'Fira Code', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 3rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .brand svg {
+      fill: var(--accent-main);
+      width: 22px;
+      height: 22px;
+    }
+
+    .brand b { color: var(--accent-main); }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-left: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent-main); }
+
+    .hero {
+      margin-bottom: 3.5rem;
+    }
+
+    .hero span {
+      font-family: var(--font-mono);
+      color: var(--accent-main);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .hero h1 span {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 2.8rem;
+      text-transform: none;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 700px;
+      font-size: 1.1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-main);
+    }
+
+    .card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-main);
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .meta {
+      border-top: 1px solid var(--card-border);
+      padding-top: 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-row {
+      display: flex;
+      margin-bottom: 0.4rem;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      width: 80px;
+      font-family: var(--font-mono);
+    }
+
+    .meta-val {
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    .btn-enter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .about-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .about-section h3 {
+      font-family: var(--font-mono);
+      color: var(--accent-main);
       font-size: 0.9rem;
       margin-bottom: 0.5rem;
     }
@@ -212,6 +440,539 @@
 
   <header>
     <div class="brand">
+      <!-- Red Hat SVG Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M21 14H3c-1.1 0-2 .9-2 2v2h22v-2c0-1.1-.9-2-2-2zm-2 0l-1.4-8.2c-.3-1.6-1.7-2.8-3.4-2.8h-4.4c-1.7 0-3.1 1.2-3.4 2.8L5 14h14z"/>
+      </svg>
+      TOKEN OPTIMIZATION <b>(AI)</b> · LAB
+    </div>
+    <nav>
+      <a href="#labs">Labs</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <span>Interactive AI Engineering Collection</span>
+    <h1>Token Optimization <span>— internal lab</span></h1>
+    <p>
+      Actionable techniques, tool breakdowns, and context strategies to cut LLM API costs and eliminate redundant context loops across model providers.
+    </p>
+  </section>
+
+  <section class="grid" id="labs">
+
+    <!-- LAB 01: CLAUDE -->
+    <a href="claude-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 01 · ANTHROPIC</span>
+        <h2>Claude Lab</h2>
+        <p>
+          Master Claude's ephemeral prompt caching, prompt ordering architectures, MCP token hygiene, and specialized token reduction tools.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">tabs</span>
+            <span class="meta-val">Caching · Tools Lab · MCP Lab</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">tools</span>
+            <span class="meta-val">Caveman · RTK · Ponytail · CodeGraph</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 02: CURSOR -->
+    <a href="cursor-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 02 · IDE AGENTS</span>
+        <h2>Cursor Lab</h2>
+        <p>
+          Optimize local context budgets using strict <code>.cursorrules</code>, lean indexing with <code>.cursorignore</code>, and smart <code>@Codebase</code> querying.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">Rules Optimization · Context Budgeting</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Interactive Config Playground</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 03: CODEX -->
+    <a href="codex-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 03 · CLI & OPENAI</span>
+        <h2>Codex Lab</h2>
+        <p>
+          Minimize context bloat in CLI coding loops, structure concise git diff context, and manage recursive token expenditure.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">CLI Loops · Diff Trimming · Batching</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Reference & Interactive Snippets</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 04: GEMINI -->
+    <a href="gemini-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 04 · GOOGLE AI</span>
+        <h2>Gemini Lab</h2>
+        <p>
+          Leverage Gemini's explicit 1M+ token context caching API, audio/video token reduction, and large-repo analysis patterns.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">Explicit Caching API · Multimodal Costs</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Cost Calculator & API Examples</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 05: OTHER AI TOOLS -->
+    <a href="other-tools-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 05 · ECOSYSTEM</span>
+        <h2>Other AI Tools Lab</h2>
+        <p><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Optimization Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0d0e12;
+      --card-bg: #14161d;
+      --card-border: #232734;
+      --accent-main: #ff2a2a; /* Bold Red */
+      --accent-purple: #9d4edd;
+      --accent-blue: #00d2ff;
+      --text-main: #e2e8f0;
+      --text-muted: #8a94a6;
+      --font-mono: 'Fira Code', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 3rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .brand svg {
+      fill: var(--accent-main);
+      width: 22px;
+      height: 22px;
+    }
+
+    .brand b { color: var(--accent-main); }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-left: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent-main); }
+
+    .hero {
+      margin-bottom: 3.5rem;
+    }
+
+    .hero span {
+      font-family: var(--font-mono);
+      color: var(--accent-main);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .hero h1 span {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 2.8rem;
+      text-transform: none;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 700px;
+      font-size: 1.1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-main);
+    }
+
+    .card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-main);
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .meta {
+      border-top: 1px solid var(--card-border);
+      padding-top: 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-row {
+      display: flex;
+      margin-bottom: 0.4rem;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      width: 80px;
+      font-family: var(--font-mono);
+    }
+
+    .meta-val {
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    .btn-enter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .about-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .about-section h3 {
+      font-family: var(--font-mono);
+      color: var(--accent-main);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-section h4 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-section p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <!-- Red Hat SVG Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M21 14H3c-1.1 0-2 .9-2 2v2h22v-2c0-1.1-.9-2-2-2zm-2 0l-1.4-8.2c-.3-1.6-1.7-2.8-3.4-2.8h-4.4c-1.7 0-3.1 1.2-3.4 2.8L5 14h14z"/>
+      </svg>
+      TOKEN OPTIMIZATION <b>(AI)</b> · LAB
+    </div>
+    <nav>
+      <a href="#labs">Labs</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <span>Interactive AI Engineering Collection</span>
+    <h1>Token Optimization <span>— internal lab</span></h1>
+    <p>
+      Actionable techniques, tool breakdowns, and context strategies to cut LLM API costs and eliminate redundant context loops across model providers.
+    </p>
+  </section>
+
+  <section class="grid" id="labs">
+
+    <!-- LAB 01: CLAUDE -->
+    <a href="claude-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 01 · ANTHROPIC</span>
+        <h2>Claude Lab</h2>
+        <p>
+          Master Claude's ephemeral prompt caching, prompt ordering architectures, MCP token hygiene, and specialized token reduction tools.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">tabs</span>
+            <span class="meta-val">Caching · Tools Lab · MCP Lab</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">tools</span>
+            <span class="meta-val">Caveman · RTK · Ponytail · CodeGraph</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 02: CURSOR -->
+    <a href="cursor-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 02 · IDE AGENTS</span>
+        <h2>Cursor Lab</h2>
+        <p>
+          Optimize local context budgets using strict <code>.cursorrules</code>, lean indexing with <code>.cursorignore</code>, and smart <code>@Codebase</code> querying.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">Rules Optimization · Context Budgeting</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Interactive Config Playground</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 03: CODEX -->
+    <a href="codex-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 03 · CLI & OPENAI</span>
+        <h2>Codex Lab</h2>
+        <p>
+          Minimize context bloat in CLI coding loops, structure concise git diff context, and manage recursive token expenditure.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">CLI Loops · Diff Trimming · Batching</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Reference & Interactive Snippets</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 04: GEMINI -->
+    <a href="gemini-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 04 · GOOGLE AI</span>
+        <h2>Gemini Lab</h2>
+        <p>
+          Leverage Gemini's explicit 1M+ token context caching API, audio/video token reduction, and large-repo analysis patterns.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">Explicit Caching API · Multimodal Costs</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Cost Calculator & API Examples</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+    <!-- LAB 05: OTHER AI TOOLS -->
+    <a href="other-tools-lab.html" class="card">
+      <div>
+        <span class="card-tag">LAB 05 · ECOSYSTEM</span>
+        <h2>Other AI Tools Lab</h2>
+        <p>
+          Token efficiency tricks for ancillary tools like CodeRabbit PR reviews, Gemini NotebookLM context prep, and automated linters.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">CodeRabbit · NotebookLM · Linters</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Tool Cheat-Sheets</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+  </section>
+
+  <section class="about-section" id="about">
+    <h3>ABOUT THE PLATFORM</h3>
+    <h4>Zero-Build, Self-Contained Engineering Labs</h4>
+    <p>
+      This platform is built entirely as flat static HTML and JavaScript—no React, no bundlers, and no server dependencies. Each lab is a standalone HTML document hosted directly via GitHub Pages.
+    </p>
+    <p>
+      The goal is to provide software engineering teams with immediate, practical patterns to shrink token budgets without reducing model output quality.
+    </p>
+  </section>
+
+  <footer>
+    Token Optimization Lab · Built with static HTML · Hosted on GitHub Pages
+  </footer>
+
+</body>
+</html>
+          Token efficiency tricks for ancillary tools like CodeRabbit PR reviews, Gemini NotebookLM context prep, and automated linters.
+        </p>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="meta-label">covers</span>
+            <span class="meta-val">CodeRabbit · NotebookLM · Linters</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">format</span>
+            <span class="meta-val">Tool Cheat-Sheets</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-enter">Enter Lab →</div>
+    </a>
+
+  </section>
+
+  <section class="about-section" id="about">
+    <h3>ABOUT THE PLATFORM</h3>
+    <h4>Zero-Build, Self-Contained Engineering Labs</h4>
+    <p>
+      This platform is built entirely as flat static HTML and JavaScript—no React, no bundlers, and no server dependencies. Each lab is a standalone HTML document hosted directly via GitHub Pages.
+    </p>
+    <p>
+      The goal is to provide software engineering teams with immediate, practical patterns to shrink token budgets without reducing model output quality.
+    </p>
+  </section>
+
+  <footer>
+    Token Optimization Lab · Built with static HTML · Hosted on GitHub Pages
+  </footer>
+
+</body>
+</html>
+
+  <header>
+    <div class="brand">
+      <!-- Red Hat SVG Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M21 14H3c-1.1 0-2 .9-2 2v2h22v-2c0-1.1-.9-2-2-2zm-2 0l-1.4-8.2c-.3-1.6-1.7-2.8-3.4-2.8h-4.4c-1.7 0-3.1 1.2-3.4 2.8L5 14h14z"/>
+      </svg>
       TOKEN OPTIMIZATION <b>(AI)</b> · LAB
     </div>
     <nav>
