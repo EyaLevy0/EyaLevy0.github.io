@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Lab · Caching How-To</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: { bg: '#0d0e12', card: '#14161d', border: '#232734', orange: '#ff9c2a', text: '#e2e8f0', muted: '#8a94a6' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #ff9c2a; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .tab-btn { background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-orange selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HUB HEADER -->
+    <header class="hub-header">
+        <a href="../index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CLAUDE <b>LAB</b>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <a href="index.html" class="tab-btn">01 CACHING</a>
+        <a href="caching-how-to.html" class="tab-btn active">01.5 HOW-TO</a>
+        <a href="tools.html" class="tab-btn">02 TOOLS & SKILLS</a>
+        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
+        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-orange text-xs font-mono mb-6 uppercase">
+                <span>> Implementation Guide</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                How Prompt Caching Works
+            </h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">
+                Caching relies on strict prefix matching, meaning the system checks your request from the very first byte. If any part of the beginning changes, the entire cache is broken. <br>
+                Set your model and effort level before starting a task, as changing either one mid-conversation <span class="text-brutal-orange">invalidates the prompt cache </span>  and increases costs.</p>
+            
+        </div>
+        
+        <div class="space-y-12">
+            
+            <!-- Mechanics Section -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                    <span class="text-brutal-muted">/01</span> Core Mechanisms
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="brutal-card p-6 border-t-2 border-t-brutal-orange">
+                        <h3 class="text-sm font-bold text-white font-mono mb-3 uppercase">> Strict Hierarchy</h3>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            The API always arranges your data in a specific order: Tools, System Instructions, and then Messages. Changing a tool definition at the top will instantly ruin the cache for the entire request.
+                        </p>
+                    </div>
+                    <div class="brutal-card p-6 border-t-2 border-t-brutal-text">
+                        <h3 class="text-sm font-bold text-white font-mono mb-3 uppercase">> 20-Block Lookback</h3>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            During a chat, the system checks up to 20 previous text blocks to find a matching save point. If the chat grows beyond this limit, you must set new breakpoints to avoid losing the cache.
+                        </p>
+                    </div>
+                    <div class="brutal-card p-6 border-t-2 border-t-brutal-text">
+                        <h3 class="text-sm font-bold text-white font-mono mb-3 uppercase">> Token Limits</h3>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Caching does not work on short prompts. You must meet a minimum token threshold, such as 1,024 tokens for Claude 3.5 Sonnet. If the prompt is too short, the API processes it normally.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Information Block -->
+            <section class="space-y-6 pt-8 mt-8 border-t border-brutal-border">
+                <div class="border border-brutal-orange p-6 bg-brutal-card relative">
+                    <div class="absolute -top-3 left-4 bg-brutal-card px-2 flex items-center gap-2 text-brutal-orange font-bold font-mono tracking-wider">
+                        <span class="bg-brutal-orange text-brutal-bg px-2">(i)</span> KNOW YOUR MODEL
+                    </div>
+                    
+                    <p class="text-sm text-brutal-muted leading-relaxed mt-2 font-sans">
+                        Set your model and effort level before starting a task, as changing either one mid-conversation <span class="text-brutal-orange">invalidates the prompt cache</span> and increases costs.
+                    </p>
+                    
+                    <p class="text-sm text-brutal-muted leading-relaxed mt-4 font-sans">
+                        The Claude model ecosystem is tiered by computational capability, latency, and cost to address different architectural workloads:
+                    </p>
+                    
+                    <ul class="text-sm text-brutal-muted space-y-4 font-mono mt-4 border-t border-brutal-border pt-4">
+                        <li class="flex gap-3">
+                            <span class="text-brutal-orange mt-0.5">></span> 
+                            <span class="leading-relaxed">
+                                <span class="text-white font-bold">Claude Haiku:</span> The fastest and most cost-effective model in the lineup. It is engineered for near-instant latency, high-volume API requests, simple data classification, and lightweight agentic routing.
+                            </span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-brutal-orange mt-0.5">></span> 
+                            <span class="leading-relaxed">
+                                <span class="text-white font-bold">Claude Sonnet:</span> The optimized workhorse. It offers the best balance of speed and advanced intelligence, widely considered the default choice for software engineering, complex coding tasks, and multi-step autonomous workflows.
+                            </span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-brutal-orange mt-0.5">></span> 
+                            <span class="leading-relaxed">
+                                <span class="text-white font-bold">Claude Opus:</span> The heavyweight reasoning engine. It operates at a higher cost and lower speed but provides top-tier performance for highly complex logic, deep analytical tasks, and extended strategic planning.
+                            </span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-brutal-orange mt-0.5">></span> 
+                            <span class="leading-relaxed">
+                                <span class="text-white font-bold">Claude Fable:</span> A premium, highly specialized model tier designed for advanced narrative, nuanced behavioral emulation, and deeply complex contextual generation. Operating at the highest price point, it is reserved for extraordinary creative or specialized reasoning.
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Visual Workflow Section -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                    <span class="text-brutal-muted">/02</span> Optimized Developer Workflow
+                </h2>
+                <p class="text-brutal-muted text-sm">To maximize savings, separate your prompt content from the most permanent to the most changeable.</p>
+                
+                <div class="flex flex-col font-mono text-xs w-full max-w-4xl mx-auto border-l-2 border-dashed border-brutal-border pl-6 relative">
+                    
+                    <!-- Layer 1: Static -->
+                    <div class="border border-brutal-orange p-5 bg-brutal-card relative mb-8">
+                        <span class="absolute -left-10 top-5 text-brutal-orange bg-brutal-bg p-1">1</span>
+                        <div class="text-brutal-orange font-bold uppercase tracking-wider mb-2">Top Layer (Highly Static)</div>
+                        <p class="text-brutal-muted mb-2">Place all global tool definitions and core system personas here. This area almost never changes.</p>
+                        <code class="block text-brutal-text bg-brutal-bg p-2 border border-brutal-border">> cache_control: { type: "ephemeral", ttl: "1h" }</code>
+                    </div>
+
+                    <!-- Layer 2: Semi-Static -->
+                    <div class="border border-brutal-border p-5 bg-brutal-bg relative mb-8">
+                        <span class="absolute -left-10 top-5 text-brutal-muted bg-brutal-bg p-1">2</span>
+                        <div class="text-white font-bold uppercase tracking-wider mb-2">Middle Layer (Semi-Static)</div>
+                        <p class="text-brutal-muted mb-2">Place project files or retrieved documents here. It stays the same during a single conversation session.</p>
+                        <code class="block text-brutal-text bg-brutal-card p-2 border border-brutal-border">> cache_control: { type: "ephemeral" }</code>
+                    </div>
+
+                    <!-- Layer 3: Dynamic -->
+                    <div class="border border-brutal-border p-5 bg-brutal-bg relative border-dashed">
+                        <span class="absolute -left-10 top-5 text-brutal-muted bg-brutal-bg p-1">3</span>
+                        <div class="text-white font-bold uppercase tracking-wider mb-2">Bottom Layer (Dynamic)</div>
+                        <p class="text-brutal-muted mb-2">The active turn-by-turn chat history. Changes on every single request.</p>
+                        <code class="block text-brutal-text bg-brutal-card p-2 border border-brutal-border">> Append new messages here only</code>
+                    </div>
+                </div>
+            </section>
+
+
+<!-- Interactive Prompt Validator -->
+            <section class="space-y-6 pt-6 border-t border-brutal-border mt-12">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/03</span> Interactive Prompt Validator
+                    </h2>
+                    <p class="text-brutal-muted text-sm mt-2">
+                        Test your prompt structure. Edit the placeholder below—try adding a dynamic variable like <code class="text-brutal-orange">{{current_time}}</code> into the System block, or move the Tools block to the bottom, then click Validate.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Editor -->
+                    <div class="flex flex-col">
+                        <div class="bg-brutal-card border border-brutal-border border-b-0 p-2 flex justify-between items-center">
+                            <span class="text-xs font-mono text-brutal-muted uppercase">Prompt_Editor.txt</span>
+                            <button onclick="validatePrompt()" class="bg-brutal-orange text-brutal-bg font-bold font-mono text-xs px-3 py-1 hover:bg-white transition-colors">
+                                > RUN VALIDATION
+                            </button>
+                        </div>
+                        <textarea id="promptEditor" class="w-full h-80 bg-brutal-bg border border-brutal-border p-4 font-mono text-sm text-brutal-text focus:outline-none focus:border-brutal-orange resize-none" spellcheck="false">
+[TOOLS]
+- name: database_search
+  defer_loading: true
+- name: calculate_metrics
+  defer_loading: true
+
+[SYSTEM]
+You are a senior data analyst. Follow all project guidelines strictly.
+> cache_control: { type: "ephemeral", ttl: "1h" }
+
+[DOCUMENTS]
+file: Q3_financial_report.csv
+> cache_control: { type: "ephemeral" }
+
+[MESSAGES]
+User: Please summarize the Q3 revenue.
+Assistant: I will search the database for that information.
+User: Great, focus only on the European market.</textarea>
+                    </div>
+
+                    <!-- Console Output -->
+                    <div class="flex flex-col">
+                        <div class="bg-brutal-card border border-brutal-border border-b-0 p-2">
+                            <span class="text-xs font-mono text-brutal-muted uppercase">Validation_Console</span>
+                        </div>
+                        <div id="validationConsole" class="w-full h-80 bg-black border border-brutal-border p-4 font-mono text-xs text-brutal-text overflow-y-auto space-y-3">
+                            <div class="text-brutal-muted">> System ready. Waiting for validation...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Best Practices Section -->
+            <section class="space-y-6 pt-6">
+                <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                    <span class="text-brutal-muted">/04</span> Guidelines
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-orange">
+                        <h3 class="text-base font-bold text-white font-mono mb-2">1. Front-Load Your Heavy Context:</h3>
+                        <p class="text-sm text-brutal-muted">Place your largest, most permanent data at the absolute beginning of your interaction. Instead of trickling in rules over multiple turns, provide your extensive reference files, API documentation, and overarching project instructions in your very first prompt so the system locks them into a stable prefix.</p>
+                    </div>
+                    
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <h3 class="text-base font-bold text-white font-mono mb-2">2. Adopt an Append-Only Mentality:</h3>
+                        <p class="text-sm text-brutal-muted">Once your baseline context is established, treat it as entirely immutable. If a local file changes or you need to adjust a rule, do not edit your initial system setup. Simply send a new message (e.g., "Update: I changed the CSS file locally, use this new version"), which safely adds to the history without destroying the foundational cache.</p>
+                    </div>
+
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <h3 class="text-base font-bold text-white font-mono mb-2">3. Ban Volatile Core Instructions:</h3>
+                        <p class="text-sm text-brutal-muted">Never inject dynamic variables, such as the current timestamp or rotating request IDs, into your project's custom instructions or system prompts. Because the caching engine relies on strict prefix matching from the very first byte, a changing variable instantly invalidates the entire cache chain.</p>
+                    </div>
+
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <h3 class="text-base font-bold text-white font-mono mb-2">4. Summarize Long Threads In-Place:</h3>
+                        <p class="text-sm text-brutal-muted">As your chat history grows toward the context limit, do not start a brand-new session to clear the console. Instead, ask Claude to summarize the progress directly within the active thread. This allows the API to read the massive history at a 90% discount to generate the summary using cache-safe compaction.</p>
+                    </div>
+
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <h3 class="text-base font-bold text-white font-mono mb-2">5. Defer Heavy Tools and Optimize TTL:</h3>
+                        <p class="text-sm text-brutal-muted">If you are utilizing agentic workflows with dozens of tools, pass lightweight tool names (stubs) and let the model search for the details when needed to keep the prefix perfectly stable. Furthermore, if you frequently pause to read code or think between prompts, configure a <code class="text-brutal-orange">1-hour Time-To-Live (TTL)</code> instead of the default 5-minute window to prevent your cache from expiring during your idle time.</p>
+                    </div>
+                </div>
+            </section>
+            
+
+            
+        </div>
+    </main>
+
+<!-- LOGIC SCRIPT -->
+    <script>
+        function validatePrompt() {
+            const editor = document.getElementById('promptEditor');
+            const consoleOutput = document.getElementById('validationConsole');
+            const text = editor.value;
+            const textLower = text.toLowerCase();
+            
+            consoleOutput.innerHTML = '<div class="text-brutal-muted">> Running diagnostic scan...</div>';
+            
+            setTimeout(() => {
+                let results = [];
+                let hasError = false;
+
+                // Rule 1: Check Structural Hierarchy
+                const idxTools = textLower.indexOf('[tools]');
+                const idxSystem = textLower.indexOf('[system]');
+                const idxMessages = textLower.indexOf('[messages]');
+                
+                if (idxTools !== -1 && idxSystem !== -1 && idxMessages !== -1) {
+                    if (idxTools < idxSystem && idxSystem < idxMessages) {
+                        results.push('<div class="text-green-400">[PASS] Hierarchy: Tools, System, and Messages are in the correct strict order.</div>');
+                    } else {
+                        results.push('<div class="text-brutal-orange">[FAIL] Hierarchy: Strict order must be [TOOLS] -> [SYSTEM] -> [MESSAGES]. Modifying this order breaks the cache.</div>');
+                        hasError = true;
+                    }
+                } else {
+                    results.push('<div class="text-brutal-orange">[FAIL] Missing blocks: Ensure [TOOLS], [SYSTEM], and [MESSAGES] headers are present.</div>');
+                    hasError = true;
+                }
+
+                // Rule 2: Check for Volatile Data in System Prompt
+                const systemBlock = textLower.substring(idxSystem, idxMessages);
+                if (systemBlock.includes('{{') || systemBlock.includes('time') || systemBlock.includes('date') || systemBlock.includes('timestamp')) {
+                    results.push('<div class="text-brutal-orange">[FAIL] Volatility: Found potential dynamic variables (like time, date, or {{...}}) in the [SYSTEM] block. This invalidates the prefix on every request.</div>');
+                    hasError = true;
+                } else {
+                    results.push('<div class="text-green-400">[PASS] Immutability: [SYSTEM] block appears static and clean.</div>');
+                }
+
+                // Rule 3: Check Breakpoints
+                const cacheTags = (textLower.match(/cache_control/g) || []).length;
+                if (cacheTags > 0 && cacheTags <= 4) {
+                    results.push(`<div class="text-green-400">[PASS] Breakpoints: Found ${cacheTags} valid cache_control tags (Max limit is 4).</div>`);
+                } else if (cacheTags > 4) {
+                    results.push('<div class="text-brutal-orange">[FAIL] Breakpoints: Too many cache_control tags. The API limit is 4.</div>');
+                    hasError = true;
+                } else {
+                    results.push('<div class="text-brutal-orange">[FAIL] Breakpoints: No cache_control tags found. Caching will not activate.</div>');
+                    hasError = true;
+                }
+
+                // Rule 4: Tool Loading
+                if (idxTools !== -1) {
+                    const toolBlock = textLower.substring(idxTools, idxSystem);
+                    if (toolBlock.includes('defer_loading')) {
+                        results.push('<div class="text-green-400">[PASS] Tool Management: Using deferred tool loading to save context space.</div>');
+                    } else {
+                        results.push('<div class="text-brutal-muted">[WARN] Tool Management: Consider using defer_loading: true for large toolsets to keep the prefix light.</div>');
+                    }
+                }
+
+                // Final Output
+                let finalStatus = hasError 
+                    ? '<div class="mt-4 pt-2 border-t border-brutal-border text-brutal-orange font-bold">> CACHE STATUS: MISS (0% Savings)</div>'
+                    : '<div class="mt-4 pt-2 border-t border-brutal-border text-green-400 font-bold">> CACHE STATUS: HIT (90% Savings)</div>';
+
+                consoleOutput.innerHTML += results.join('') + finalStatus;
+            }, 400); // Small delay for terminal feel
+        }
+    </script>
+
+</body>
+</html>
