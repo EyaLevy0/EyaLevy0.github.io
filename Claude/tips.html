@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Lab · Tips & Hacks</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: {
+                            bg: '#0d0e12',
+                            card: '#14161d',
+                            border: '#342d23',
+                            orange: '#ff9c2a',
+                            text: '#e2e8f0',
+                            muted: '#8a94a6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #ff9c2a; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        
+        .tabs { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .tab-btn { background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-orange selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HUB HEADER -->
+    <header class="hub-header">
+        <a href="../index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CLAUDE <b>LAB</b>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <a href="index.html" class="tab-btn">01 CACHING</a>
+        <a href="caching-how-to.html" class="tab-btn">01.5 HOW-TO</a>
+        <a href="tools.html" class="tab-btn">02 TOOLS & SKILLS</a>
+        <a href="commands.html" class="tab-btn active">03 TIPS & HACKS</a>
+        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
+        
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-orange text-xs font-mono mb-6 uppercase">
+                <span>> Field Manual</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                Optimization Tactics & Lexicon
+            </h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">
+                A curated repository of practical token-saving hacks and CLI command utilization strategies sourced directly from active production environments.
+            </p>
+        </div>
+        
+        <div class="space-y-12">
+            
+            <!-- Command Lexicon -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                    <span class="text-brutal-muted">/01</span> CLI Command Lexicon
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/clear</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Context Purge</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Run this command strictly between discrete tasks to prevent prior, irrelevant context from persisting and artificially inflating your input token count.
+                        </p>
+                    </div>
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/cost</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Spend & Token Analytics</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Monitors your real-time token usage, cost, and cache hit rates for the active session. Essential for verifying that your prompt caching strategy is actually working and tracking your exact savings.
+                        </p>
+                    </div>
+
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/config</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Environment Validation</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Use this to lock in your preferred model and default effort level globally. Setting these parameters here prevents accidental mid-session changes that would silently destroy your entire prompt cache.
+                        </p>
+                    </div>
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/compact</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Cache-Safe Summarization</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Summarize your session before taking a break. This takes advantage of cheaper summarization read costs while the 1-hour prompt cache is still warm.
+                        </p>
+                    </div>
+
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/context</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Footprint Audit</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Execute in a fresh session to audit your baseline footprint. Allows you to disable unnecessary MCP servers or trim bloated instructions before generating code.
+                        </p>
+                    </div>
+
+                    <div class="border border-brutal-border bg-brutal-card p-5 relative overflow-hidden">
+                        <div class="text-lg font-bold text-white font-mono mb-1">/btw</div>
+                        <div class="text-xs text-brutal-orange font-mono mb-3 uppercase">> Stateless Queries</div>
+                        <p class="text-sm text-brutal-muted leading-relaxed">
+                            Use this for exploratory tangents or side questions. It ensures temporary queries are not permanently embedded into your session history and continuously re-read.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Workflows -->
+            <section class="space-y-6 pt-6 border-t border-brutal-border">
+                <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                    <span class="text-brutal-muted">/02</span> Advanced Token Hacks
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Prompting & Conversation -->
+                    <div class="space-y-4">
+                        <ul class="space-y-4">
+                        <li class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Aggressive .claudeignore</h3>
+                                <p class="text-sm text-brutal-muted">Place a <code class="text-brutal-orange">.claudeignore</code> file in your project root. By excluding build outputs, lock files, and massive JSON logs, you prevent the agent from burning millions of tokens when it inevitably executes a broad grep or automated file search.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Subdirectory CLAUDE.md Stacking</h3>
+                                <p class="text-sm text-brutal-muted">Do not put every project rule into a massive global <code class="text-brutal-text">CLAUDE.md</code>, as that cost is incurred on every session forever. Keep the root file small and place specific instructions in subdirectory <code class="text-brutal-text">CLAUDE.md</code> files. Claude will only load them into context when it actually navigates into those folders.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Machine-Optimized Handoffs</h3>
+                                <p class="text-sm text-brutal-muted">When hitting context limits, summarize exact goals, decisions, and code blocks needed for a future agent to read cold, eliminating the need to re-read the raw chat log.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Message Overwrites</h3>
+                                <p class="text-sm text-brutal-muted">When the agent misunderstands, edit your original message instead of sending a follow-up correction. This replaces the failed attempt rather than endlessly stacking useless history in the context window.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- File Handling -->
+                    <div class="space-y-4">
+                        <ul class="space-y-4">
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Optimize File Mentions</h3>
+                                <p class="text-sm text-brutal-muted">Include files using <code class="text-brutal-orange">@</code>-mentions in the initial request to prevent the agent from wasting a read tool call. Never <code class="text-brutal-orange">@</code>-mention the same file twice, as it redundantly duplicates the file in context.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Quiet Terminal Flags</h3>
+                                <p class="text-sm text-brutal-muted">Append quiet flags to noisy commands (e.g., <code class="text-brutal-text">--reporter=dot</code>) so massive blocks of standard output do not permanently embed themselves in the session history.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Effort Level Scoping</h3>
+                                <p class="text-sm text-brutal-muted">Avoid defaulting to <code class="text-brutal-text">xhigh</code> effort for routine tasks. Reserving higher effort only for complex architecture decisions prevents an unnecessary 1.5x to 3x token premium. Set the effort level before starting, as changing it mid-session breaks the cache.</p>
+                            </li>
+                            <li class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                                <h3 class="text-sm font-bold text-white font-mono mb-2">Directory Launch Scoping</h3>
+                                <p class="text-sm text-brutal-muted">Claude Code indexes the directory it is launched from. Instead of launching from the monorepo root for a targeted fix, <code class="text-brutal-text">cd</code> into the specific module (e.g., <code class="text-brutal-text">packages/ui</code>) and launch the agent there to strictly bound its exploration blast radius.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+            
+        </div>
+    </main>
+
+</body>
+</html>

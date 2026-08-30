@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Lab · Token Optimization</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration for Brutalist Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: {
+                            bg: '#0d0e12',
+                            card: '#14161d',
+                            border: '#232734',
+                            orange: '#ff9c2a',
+                            text: '#e2e8f0',
+                            muted: '#8a94a6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Brutalist Hub Styles -->
+    <style>
+        :root {
+            --bg: #0d0e12;
+            --card-bg: #14161d;
+            --card-border: #342d23;
+            --accent-main: #ff9c2a;
+            --text-main: #e2e8f0;
+            --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            padding: 2rem 1rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        header.hub-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; 
+        }
+
+        header.hub-header a { 
+            color: var(--text-muted); text-decoration: none; 
+            font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s;
+        }
+
+        header.hub-header a:hover { color: var(--accent-main); }
+
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+        
+        .brand-icon {
+            width: 22px; height: 22px; background-color: var(--accent-main);
+            -webkit-mask: url('redhat.svg') no-repeat center / contain;
+            mask: url('redhat.svg') no-repeat center / contain;
+        }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        
+        .tab-btn { 
+            background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); 
+            padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none;
+        }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
+        
+        /* Infographic Overrides */
+        .chart-box { position: relative; width: 100%; height: 320px; }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+        
+        /* Custom scrollbar for range inputs */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 8px; background: var(--accent-main); cursor: pointer; margin-top: -6px; border-radius: 0; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-orange selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HUB HEADER -->
+    <header class="hub-header">
+        <a href="../index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CLAUDE <b>LAB</b>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <a href="index.html" class="tab-btn active">01 CACHING</a>
+        <a href="caching-how-to.html" class="tab-btn">01.5 HOW-TO</a>
+        <a href="tools.html" class="tab-btn">02 TOOLS & SKILLS</a>
+        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
+        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-orange text-xs font-mono mb-6 uppercase">
+                <span>> Optimization Vector</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                Claude Prompt Caching
+            </h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">
+                Instead of reading the exact same prompt over and over, Claude can save it in memory. This lets you cut input token costs by up to <span class="text-brutal-orange font-mono font-bold">90%</span> and significantly speed up agentic loops.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="brutal-card p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-orange font-mono mb-1">90%</div>
+                    <div class="text-xs font-bold text-brutal-text uppercase tracking-wider">Read Discount</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">Pay 10% on saved data</div>
+                </div>
+                <div class="brutal-card p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-orange font-mono mb-1">2x-5x</div>
+                    <div class="text-xs font-bold text-brutal-text uppercase tracking-wider">Speed Boost</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">Zero reprocessing time</div>
+                </div>
+                <div class="brutal-card p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-orange font-mono mb-1">1k-4k</div>
+                    <div class="text-xs font-bold text-brutal-text uppercase tracking-wider">Min Tokens</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">Required prompt prefix</div>
+                </div>
+                <div class="brutal-card p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-orange font-mono mb-1">4 Max</div>
+                    <div class="text-xs font-bold text-brutal-text uppercase tracking-wider">Breakpoints</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">Available save points</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-20">
+            
+            <!-- Key Terms -->
+            <section id="terms" class="space-y-6">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/01</span> Key Terms
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Token</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">Pieces of words or code. 1,000 tokens ≈ 750 words. Billing is strictly based on read/write counts.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                        <div class="text-sm font-bold text-white font-mono mb-2">TTL (Time To Live)</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">How long Claude keeps your prompt in fast memory (usually 5 mins). Every hit resets the timer.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Cache Write</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">The first time a prompt is saved. Costs a +25% premium over standard API pricing.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Cache Read</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">Retrieving a saved prompt on subsequent calls. Granted a 90% discount on standard rates.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Prefix Matching</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">The cache checks from token zero. The beginning of your prompt must remain 100% identical.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Breakpoint</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">A <code class="text-brutal-orange">cache_control</code> tag placed in the payload dictating exactly where to save state.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Rules -->
+            <section id="overview" class="space-y-6">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/02</span> Architecture Rules
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="brutal-card p-6">
+                        <div class="text-sm font-bold text-white font-mono mb-3 uppercase tracking-wider">> Exact Byte Match</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed mb-4">Claude checks your prompt starting from token zero. Changing a single space or timestamp near the beginning invalidates the entire cache chain.</p>
+                    </div>
+                    <div class="brutal-card p-6">
+                        <div class="text-sm font-bold text-white font-mono mb-3 uppercase tracking-wider">> Fixed Order</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed mb-4">The API enforces strict structural hierarchy:</p>
+                        <ol class="text-xs text-brutal-text font-mono list-decimal list-inside space-y-1 mb-3">
+                            <li>Tools List</li>
+                            <li>System Prompts</li>
+                            <li>Messages Array</li>
+                        </ol>
+                    </div>
+                    <div class="brutal-card p-6">
+                        <div class="text-sm font-bold text-white font-mono mb-3 uppercase tracking-wider">> Lookback Window</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed mb-4">During multi-turn chat sessions, Claude looks back up to 20 text blocks to find your last saved breakpoint. Keep histories lean.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TTL Economics & Rate Limits -->
+            <section id="ttl-economics" class="space-y-6 pt-6">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/02.5</span> TTL Economics & Rate Limits
+                    </h2>
+                </div>
+                
+                <div class="brutal-card p-6 border-l-4 border-l-brutal-orange">
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-6">
+                        Prompt caching dictates application viability through three billing tiers: standard uncached inputs (1.0x), premium cache writes, and deeply discounted cache reads (0.1x). Crucially, successfully read cache tokens are systematically excluded from Input Tokens Per Minute (ITPM) limits, acting as a native throughput multiplier for scaling enterprise applications.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 5-Minute Block -->
+                        <div class="border border-brutal-border p-4 bg-brutal-bg">
+                            <div class="text-xs font-bold font-mono text-white mb-2 uppercase tracking-wider">> 5-Minute TTL (Default)</div>
+                            <ul class="text-xs text-brutal-muted space-y-2 font-mono">
+                                <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                    <span>Write Premium</span> <span class="text-brutal-orange">1.25x Base</span>
+                                </li>
+                                <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                    <span>Read Discount</span> <span class="text-brutal-orange">0.10x Base</span>
+                                </li>
+                                <li class="flex justify-between pb-1">
+                                    <span>Target Workload</span> <span class="text-white">Autonomous Agents</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 1-Hour Block -->
+                        <div class="border border-brutal-border p-4 bg-brutal-bg">
+                            <div class="text-xs font-bold font-mono text-white mb-2 uppercase tracking-wider">> 1-Hour TTL (Extended)</div>
+                            <ul class="text-xs text-brutal-muted space-y-2 font-mono">
+                                <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                    <span>Write Premium</span> <span class="text-brutal-orange">2.00x Base</span>
+                                </li>
+                                <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                    <span>Read Discount</span> <span class="text-brutal-orange">0.10x Base</span>
+                                </li>
+                                <li class="flex justify-between pb-1">
+                                    <span>Target Workload</span> <span class="text-white">Human-in-the-Loop</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-brutal-bg border border-brutal-border text-xs text-brutal-muted font-mono">
+                        > WARNING: Structural constraints dictate that longer TTL entries (1-hour) must physically appear before shorter TTL entries (5-minute) in the prompt hierarchy.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data & Thresholds -->
+            <section id="models" class="space-y-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/03</span> Economics & Data
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="brutal-card p-6">
+                        <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">Min Tokens by Model</h3>
+                        <div class="chart-box mt-4"><canvas id="thresholdsChart"></canvas></div>
+                    </div>
+                    <div class="brutal-card p-6">
+                        <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">Token Multipliers</h3>
+                        <div class="chart-box mt-4"><canvas id="multipliersChart"></canvas></div>
+                    </div>
+                    <div class="brutal-card p-6">
+                        <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">Cost Scaling (100 Calls)</h3>
+                        <div class="chart-box mt-4"><canvas id="costScalingChart"></canvas></div>
+                    </div>
+                    <div class="brutal-card p-6">
+                        <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">Throughput Boost</h3>
+                        <div class="chart-box mt-4"><canvas id="throughputChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Calculator -->
+            <section id="calculator" class="space-y-6">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/04</span> Savings Simulator
+                    </h2>
+                </div>
+                <div class="brutal-card p-6 md:p-8 border-brutal-orange border-l-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-6">
+                            
+                            <div>
+                                <label class="block text-xs font-mono text-brutal-muted uppercase mb-2">Model Selection</label>
+                                <select id="calcModel" class="w-full bg-brutal-bg border border-brutal-border px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-brutal-orange cursor-pointer">
+                                    <option value="3.00">Sonnet 4.6 ($3.00/M Base)</option>
+                                    <option value="15.00">Opus 4.6 ($15.00/M Base)</option>
+                                    <option value="18.00">Opus 4.8 ($18.00/M Base)</option>
+                                    <option value="1.50">Fable 5 ($1.50/M Base)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs font-mono text-brutal-text mb-2">
+                                    <span>Static Context</span>
+                                    <span id="calcTokensVal" class="text-brutal-orange font-bold">25,000</span>
+                                </div>
+                                <input type="range" id="calcTokens" min="2000" max="100000" step="1000" value="25000" class="w-full">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs font-mono text-brutal-text mb-2">
+                                    <span>Requests / Session</span>
+                                    <span id="calcRequestsVal" class="text-brutal-orange font-bold">50</span>
+                                </div>
+                                <input type="range" id="calcRequests" min="2" max="200" step="1" value="50" class="w-full">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-mono text-brutal-muted uppercase mb-2">TTL Setup</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="flex items-center gap-2 p-3 bg-brutal-bg border border-brutal-border cursor-pointer text-xs font-mono text-brutal-text transition-colors hover:border-brutal-text">
+                                        <input type="radio" name="calcTtl" value="1.25" checked class="accent-brutal-orange">
+                                        <span>5-Min (1.25x)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-brutal-bg border border-brutal-border cursor-pointer text-xs font-mono text-brutal-text transition-colors hover:border-brutal-text">
+                                        <input type="radio" name="calcTtl" value="2.00" class="accent-brutal-orange">
+                                        <span>1-Hour (2.0x)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-7 bg-brutal-bg p-6 border border-brutal-border space-y-6">
+                            <div class="text-center pb-6 border-b border-brutal-border">
+                                <span class="text-xs uppercase tracking-widest text-brutal-muted font-mono block mb-4">Total Cost Projection</span>
+                                <div class="flex items-baseline justify-center gap-8">
+                                    <div>
+                                        <span class="text-xs text-brutal-muted font-mono block mb-1">Uncached</span>
+                                        <span id="uncachedCostDisplay" class="text-2xl font-mono text-brutal-muted line-through">$3.75</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs text-brutal-orange font-mono font-bold block mb-1">Cached</span>
+                                        <span id="cachedCostDisplay" class="text-4xl font-mono font-bold text-brutal-orange">$0.46</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="p-4 bg-brutal-card border border-brutal-border">
+                                    <span class="text-xs text-brutal-muted font-mono block mb-1">Capital Saved</span>
+                                    <span id="netSavingsDisplay" class="text-xl font-bold text-white font-mono">$3.29</span>
+                                </div>
+                                <div class="p-4 bg-brutal-card border border-brutal-border">
+                                    <span class="text-xs text-brutal-muted font-mono block mb-1">Efficiency</span>
+                                    <span id="percentSavedDisplay" class="text-xl font-bold text-white font-mono">87.7%</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-brutal-card border border-brutal-border text-xs text-brutal-muted font-mono">
+                                > Over <span id="summaryCalls" class="text-white font-bold">50</span> iterations, caching prevents <span id="summaryTokens" class="text-brutal-orange font-bold">1,225,000</span> redundant token reads.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5 tips section -->
+            <section id="tips" class="space-y-6 pt-10">
+                <div class="max-w-3xl mb-8">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/05</span> Workflow Tips
+                    </h2>
+                </div>
+                <div class="space-y-4 max-w-4xl">
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-orange">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> TIP 01</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Static Text First, Dynamic Last</h3>
+                        <p class="text-sm text-brutal-muted">Place tool schemas and main instructions at the top, and user messages at the end. Because Claude checks prompts from the start, changes at the bottom won't break the cache at the top.</p>
+                    </div>
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> TIP 02</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Append Updates to History</h3>
+                        <p class="text-sm text-brutal-muted">Never update system instructions during an active conversation to add timestamps. Changing the system prompt breaks the entire cache! Append new info as a message instead.</p>
+                    </div>
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> TIP 03</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Use Tool Search</h3>
+                        <p class="text-sm text-brutal-muted">Sending full definitions for dozens of tools wastes tokens. Mark extra tools as lightweight stubs with <code class="text-brutal-orange">defer_loading: true</code> and let Claude search for them.</p>
+                    </div>
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> TIP 04</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Reuse State When Summarizing</h3>
+                        <p class="text-sm text-brutal-muted">When summarizing, do not strip away system prompts. Send your request with the original history intact, and add "Please summarize our chat." You will get a 90% cache discount.</p>
+                    </div>
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> TIP 05</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">TTL Selection</h3>
+                        <p class="text-sm text-brutal-muted">Use 5-minute TTL for automated loops. Switch to 1-hour extended TTL for apps where human users stop to read or think between queries.</p>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        // Chart Utilities & Brutalist Config
+        Chart.defaults.font.family = "'Fira Code', monospace";
+        Chart.defaults.color = '#8a94a6';
+        
+        const brutalChartOptions = {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { font: { size: 11 } } },
+                tooltip: { backgroundColor: '#14161d', titleColor: '#ff9c2a', bodyColor: '#e2e8f0', borderColor: '#232734', borderWidth: 1, cornerRadius: 0 }
+            },
+            scales: {
+                x: { grid: { color: '#232734' } },
+                y: { grid: { color: '#232734' } }
+            }
+        };
+
+        // Render Thresholds Chart
+        const ctxThresholds = document.getElementById('thresholdsChart').getContext('2d');
+        new Chart(ctxThresholds, {
+            type: 'bar',
+            data: {
+                labels: ['Sonnet 4.6', 'Opus 4.6', 'Opus 4.8', 'Fable 5'],
+                datasets: [{
+                    label: 'Min Tokens',
+                    data: [1024, 2048, 2048, 4096],
+                    backgroundColor: ['#232734', '#e2e8f0', '#8a94a6', '#ff9c2a'],
+                    borderWidth: 1, borderColor: '#14161d'
+                }]
+            },
+            options: { ...brutalChartOptions, indexAxis: 'y', plugins: { legend: { display: false } } }
+        });
+
+        // Render Cost Scaling Chart
+        const ctxCostScaling = document.getElementById('costScalingChart').getContext('2d');
+        new Chart(ctxCostScaling, {
+            type: 'bar',
+            data: {
+                labels: ['10 Calls', '25 Calls', '50 Calls', '100 Calls'],
+                datasets: [
+                    { label: 'Uncached ($)', data: [0.75, 1.875, 3.75, 7.50], backgroundColor: '#8a94a6' },
+                    { label: 'Cached ($)', data: [0.16, 0.27, 0.46, 0.84], backgroundColor: '#ff9c2a' }
+                ]
+            },
+            options: brutalChartOptions
+        });
+
+        // Render Multipliers Chart
+        const ctxMultipliers = document.getElementById('multipliersChart').getContext('2d');
+        new Chart(ctxMultipliers, {
+            type: 'doughnut',
+            data: {
+                labels: ['Uncached Input', '5-Min Cache Write', '1-Hour Cache Write', 'Cache Read Discount'],
+                datasets: [{
+                    data: [1.0, 1.25, 2.0, 0.1],
+                    backgroundColor: ['#232734', '#ff9c2a', '#8a94a6', '#e2e8f0'],
+                    borderWidth: 1, borderColor: '#14161d'
+                }]
+            },
+            options: brutalChartOptions
+        });
+
+        // Render Throughput Chart
+        const ctxThroughput = document.getElementById('throughputChart').getContext('2d');
+        new Chart(ctxThroughput, {
+            type: 'line',
+            data: {
+                labels: ['0% Hit', '25% Hit', '50% Hit', '75% Hit', '90% Hit'],
+                datasets: [{
+                    label: 'Speed Multiplier',
+                    data: [1.0, 1.33, 2.0, 4.0, 10.0],
+                    borderColor: '#ff9c2a', backgroundColor: 'rgba(240, 156, 42, 0.1)',
+                    fill: true, tension: 0, pointBackgroundColor: '#ff9c2a', pointRadius: 4
+                }]
+            },
+            options: brutalChartOptions
+        });
+
+        // Interactive Calculator Logic
+        const els = {
+            model: document.getElementById('calcModel'),
+            tokens: document.getElementById('calcTokens'),
+            reqs: document.getElementById('calcRequests'),
+            tVal: document.getElementById('calcTokensVal'),
+            rVal: document.getElementById('calcRequestsVal'),
+            uCost: document.getElementById('uncachedCostDisplay'),
+            cCost: document.getElementById('cachedCostDisplay'),
+            net: document.getElementById('netSavingsDisplay'),
+            pct: document.getElementById('percentSavedDisplay'),
+            sCalls: document.getElementById('summaryCalls'),
+            sToks: document.getElementById('summaryTokens')
+        };
+
+        function updateCalc() {
+            const base = parseFloat(els.model.value);
+            const tok = parseInt(els.tokens.value);
+            const req = parseInt(els.reqs.value);
+            const ttl = parseFloat(document.querySelector('input[name="calcTtl"]:checked').value);
+
+            els.tVal.innerText = tok.toLocaleString();
+            els.rVal.innerText = req;
+
+            const uTot = (tok * req * base) / 1000000;
+            const wCost = (tok * ttl * base) / 1000000;
+            const rCost = (tok * (req - 1) * 0.1 * base) / 1000000;
+            const cTot = wCost + rCost;
+
+            els.uCost.innerText = '$' + uTot.toFixed(2);
+            els.cCost.innerText = '$' + cTot.toFixed(2);
+            els.net.innerText = '$' + (uTot - cTot).toFixed(2);
+            els.pct.innerText = uTot > 0 ? ((uTot - cTot) / uTot * 100).toFixed(1) + '%' : '0%';
+            els.sCalls.innerText = req;
+            els.sToks.innerText = (tok * (req - 1)).toLocaleString();
+        }
+
+        [els.model, els.tokens, els.reqs].forEach(e => e.addEventListener('input', updateCalc));
+        document.querySelectorAll('input[name="calcTtl"]').forEach(r => r.addEventListener('change', updateCalc));
+        updateCalc();
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Optimization Lab · About</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: {
+                            bg: '#0d0e12',
+                            card: '#14161d',
+                            border: '#342d23',
+                            red: '#f90a0a',
+                            text: '#e2e8f0',
+                            muted: '#8a94a6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #0d0e12;
+            --card-bg: #14161d;
+            --card-border: #342d23;
+            --accent-main: #f90a0a;
+            --text-main: #e2e8f0;
+            --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            padding: 2rem 1rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        header.hub-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; 
+        }
+
+        header.hub-header a { 
+            color: var(--text-muted); text-decoration: none; 
+            font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s;
+        }
+
+        header.hub-header a:hover { color: var(--accent-main); }
+
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-red selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HEADER -->
+    <header class="hub-header">
+        <a href="index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <!-- Red Hat SVG Icon -->
+      <img src="redhat.svg" alt="Red Hat Icon" style="width: 22px; height: 22px;">
+            TOKEN OPTIMIZATION LAB
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-red text-xs font-mono mb-6 uppercase">
+                <span>> Initialization</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl font-bold tracking-tight text-white mb-6">
+                About the Lab
+            </h1>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl">
+            
+            <!-- Whoami Section -->
+            <section class="space-y-6">
+                <div class="brutal-card p-8 border-l-4 border-l-brutal-text">
+                    <h2 class="text-2xl font-bold font-heading text-white mb-4"> > Why?</h2>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">
+                        This lab is a living research tool designed to help developers cut AI costs. As we build more advanced AI systems, managing token limits is critical. Our goal is to discover, test, and share practical token-saving techniques so engineers can build highly efficient software without hitting API limits.
+                    </p>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">
+                        This Lab was coded solely using Gemini's chat interface. Use your tokens wisely 😉
+                    </p>
+                    <ul class="text-sm text-brutal-muted space-y-2 font-mono mt-6 border-t border-brutal-border pt-4">
+                        <li>> <span class="text-brutal-red">Goal 01:</span> To make token saving tools and principles accessible to all developers.</li>
+                        <li>> <span class="text-brutal-red">Goal 02:</span> Redefine the way we write prompts in order to get the best results while minimizing our token use.</li>
+                        <li>> <span class="text-brutal-red">Goal 03:</span> Create an open community and a central place to share knowledge.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Why Section -->
+            <section class="space-y-6">
+                <div class="brutal-card p-8 border-l-4 border-l-brutal-red">
+                    <h2 class="text-2xl font-bold font-heading text-white mb-4"> > Whoami</h2>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">
+                        Eyal Levy, a software engineer intern at the partner accelerator team under Ecosystem Engineering at Red Hat since August 2026.
+                    </p>    
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">
+                        Passonate about learning new things and utilizing AI capabilities to achive my goals.</p>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">
+                        Please reach out if you have more ways and information you would like me to include in this lab.
+                    </p>
+                    <a href="mailto:eylevy@redhat.com" class="inline-flex items-center gap-2 bg-brutal-bg border border-brutal-border text-brutal-text font-mono text-sm px-6 py-3 hover:border-brutal-red hover:text-white transition-all whitespace-nowrap">
+                        > SEND_EMAIL
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

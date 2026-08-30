@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Lab · Optimized Session Walkthrough</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: {
+                            bg: '#0d0e12',
+                            card: '#14161d',
+                            border: '#342d23',
+                            orange: '#ff9c2a',
+                            text: '#e2e8f0',
+                            muted: '#8a94a6',
+                            green: '#4ade80'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #ff9c2a; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        
+        .tabs { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .tab-btn { background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-orange selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HUB HEADER -->
+    <header class="hub-header">
+        <a href="../index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CLAUDE <b>LAB</b>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <a href="index.html" class="tab-btn">01 CACHING</a>
+        <a href="caching-how-to.html" class="tab-btn">01.5 HOW-TO</a>
+        <a href="tools.html" class="tab-btn">02 TOOLS & SKILLS</a>
+        <a href="tips.html" class="tab-btn">03 TIPS & HACKS </a>
+        <a href="session.html" class="tab-btn active">04 SESSION EXAMPLE</a>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-orange text-xs font-mono mb-6 uppercase">
+                <span>> Live Case Study</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                Optimized Session Walkthrough
+            </h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">
+                An end-to-end execution transcript demonstrating real-world token optimization strategies in action: from directory scoping and front-loaded prompt caching to quiet terminal execution and in-place context compaction.
+            </p>
+        </div>
+
+        <!-- Developer Intent & Job Setup -->
+        <section class="space-y-6 mb-12">
+            <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                <span class="text-brutal-muted">/01</span> Developer Intent & Environment Setup
+            </h2>
+            
+            <div class="brutal-card p-6 border-l-4 border-l-brutal-orange space-y-4">
+                <div>
+                    <h3 class="text-base font-bold font-mono text-white uppercase mb-1">> Task Objective</h3>
+                    <p class="text-sm text-brutal-muted leading-relaxed">
+                        Refactor an asynchronous JWT token validation race condition in a multi-tenant monorepo package (<code class="text-brutal-text">packages/auth</code>), write missing unit tests, and update session refresh handling without breaking downstream services.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-brutal-border font-mono text-xs">
+                    <div class="bg-brutal-bg p-3 border border-brutal-border">
+                        <span class="text-brutal-orange font-bold block mb-1">1. Directory Launch Scope</span>
+                        <span class="text-brutal-muted">Executed <code class="text-white">cd packages/auth</code> before launching Claude Code to restrict the automatic file index scope.</span>
+                    </div>
+                    <div class="bg-brutal-bg p-3 border border-brutal-border">
+                        <span class="text-brutal-orange font-bold block mb-1">2. Environment Lock</span>
+                        <span class="text-brutal-muted">Model locked via <code class="text-white">/config</code> to Sonnet 3.5 with Medium effort and a 1-hour TTL block.</span>
+                    </div>
+                    <div class="bg-brutal-bg p-3 border border-brutal-border">
+                        <span class="text-brutal-orange font-bold block mb-1">3. Ignore Safeguards</span>
+                        <span class="text-brutal-muted"><code class="text-white">.claudeignore</code> configured to block <code class="text-white">/dist</code>, build caches, and test coverage dumps.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Session Transcript -->
+        <section class="space-y-6 mb-12">
+            <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                <span class="text-brutal-muted">/02</span> Session Execution Transcript
+            </h2>
+
+            <div class="border border-brutal-border bg-black font-mono text-xs space-y-6 p-6 overflow-x-auto">
+                
+                <!-- Turn 1 -->
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-orange">
+                        <span class="bg-brutal-orange text-black px-1 font-bold">TURN 01</span>
+                        <span class="text-brutal-muted">[Front-Loading & Caveman Rules]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-orange">usr></span> Inspect @src/session.ts and @src/jwt.ts. Refactor token verification to resolve race conditions during concurrent refreshes. Terse output. No preambles.
+                    </div>
+                    <div class="text-brutal-muted bg-brutal-bg p-3 border border-brutal-border space-y-1">
+                        <div class="text-brutal-green">> SYSTEM: Attached files directly via @-mentions (bypassed read-file tool calls).</div>
+                        <div class="text-brutal-green">> CACHE: Wrote 14,200 tokens to 1-hour cache (14.2k cache_creation_input_tokens @ 2.0x).</div>
+                        <div class="text-white mt-2">Identified missing mutex on token refresh block in <code class="text-brutal-orange">session.ts:42</code>. Drafted async lock wrapper. Modifying file...</div>
+                    </div>
+                </div>
+
+                <!-- Turn 2 -->
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-orange">
+                        <span class="bg-brutal-orange text-black px-1 font-bold">TURN 02</span>
+                        <span class="text-brutal-muted">[Quiet Terminal Execution via RTK Proxy]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-orange">usr></span> Run tests to verify fix.
+                    </div>
+                    <div class="text-brutal-muted bg-brutal-bg p-3 border border-brutal-border space-y-1">
+                        <div class="text-brutal-green">> SYSTEM: Executing "rtk run -- pnpm test --reporter=dot"</div>
+                        <div class="text-brutal-green">> CACHE: Read 14,200 tokens from 1-hour cache (14.2k cache_read_input_tokens @ 0.1x). Hit rate: 98.2%.</div>
+                        <div class="text-white mt-2">12 passed, 0 failed. Output compressed from 820 lines of boilerplate to 2 lines.</div>
+                    </div>
+                </div>
+
+                <!-- Turn 3 -->
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-orange">
+                        <span class="bg-brutal-orange text-black px-1 font-bold">TURN 03</span>
+                        <span class="text-brutal-muted">[Stateless Side-Query via /btw]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-orange">usr></span> /btw Is JWT expiration calculated in seconds or milliseconds in our standard auth payload?
+                    </div>
+                    <div class="text-brutal-muted bg-brutal-bg p-3 border border-brutal-border space-y-1">
+                        <div class="text-brutal-green">> SYSTEM: Query processed statelessly without appending to main conversation history.</div>
+                        <div class="text-white mt-1">Seconds (Unix Epoch standard per RFC 7519).</div>
+                    </div>
+                </div>
+
+                <!-- Turn 4 -->
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-orange">
+                        <span class="bg-brutal-orange text-black px-1 font-bold">TURN 04</span>
+                        <span class="text-brutal-muted">[Append-Only State Update & Deferred Tool Expansion]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-orange">usr></span> Update: Local env variable set to JWT_EXP=3600. Add expiry verification logic to jwt.ts.
+                    </div>
+                    <div class="text-brutal-muted bg-brutal-bg p-3 border border-brutal-border space-y-1">
+                        <div class="text-brutal-green">> SYSTEM: Appended instruction to history array. Prefix remains unbroken.</div>
+                        <div class="text-brutal-green">> TOOLS: Expanded schema for tool "calculate_metrics" dynamically via Tool Search.</div>
+                        <div class="text-brutal-green">> CACHE: Read 15,100 tokens from cache @ 0.1x discount.</div>
+                        <div class="text-white mt-2">Added <code class="text-brutal-orange">verifyExpiry()</code> guard in <code class="text-brutal-orange">jwt.ts</code>.</div>
+                    </div>
+                </div>
+
+                <!-- Turn 5 -->
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-brutal-orange">
+                        <span class="bg-brutal-orange text-black px-1 font-bold">TURN 05</span>
+                        <span class="text-brutal-muted">[In-Place Context Compaction]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-orange">usr></span> /compact
+                    </div>
+                    <div class="text-brutal-muted bg-brutal-bg p-3 border border-brutal-border space-y-1">
+                        <div class="text-brutal-green">> SYSTEM: Executing cache-safe compaction fork. Matched active session prefix.</div>
+                        <div class="text-brutal-green">> SAVINGS: Read 32,400 token history at 0.1x cache read rate instead of 1.0x standard rate.</div>
+                        <div class="text-white mt-2">Session compacted into concise state block. Ready for follow-up prompts.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Token Savings Analytics -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                <span class="text-brutal-muted">/03</span> Token Analytics & ROI Breakdown
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 font-mono mb-8">
+                <div class="brutal-card p-4 border-t-2 border-t-brutal-orange">
+                    <div class="text-xs text-brutal-muted mb-1">TOTAL INPUT TOKENS</div>
+                    <div class="text-2xl font-bold text-white">76,800</div>
+                    <div class="text-[10px] text-brutal-green mt-2">↑ 64.2k Served via Cache</div>
+                </div>
+
+                <div class="brutal-card p-4 border-t-2 border-t-brutal-green">
+                    <div class="text-xs text-brutal-muted mb-1">CACHE HIT RATE</div>
+                    <div class="text-2xl font-bold text-brutal-green">83.6%</div>
+                    <div class="text-[10px] text-brutal-muted mt-2">Prefix Unbroken Across 5 Turns</div>
+                </div>
+
+                <div class="brutal-card p-4 border-t-2 border-t-brutal-orange">
+                    <div class="text-xs text-brutal-muted mb-1">OUTPUT TOKENS</div>
+                    <div class="text-2xl font-bold text-white">420</div>
+                    <div class="text-[10px] text-brutal-green mt-2">↓ 48% via Caveman Prompting</div>
+                </div>
+
+                <div class="brutal-card p-4 border-t-2 border-t-brutal-green">
+                    <div class="text-xs text-brutal-muted mb-1">NET COST SAVINGS</div>
+                    <div class="text-2xl font-bold text-brutal-green">74.8%</div>
+                    <div class="text-[10px] text-brutal-muted mt-2">vs. Standard Uncached Baseline</div>
+                </div>
+            </div>
+
+            <!-- Detailed Impact Ledger Table -->
+            <div class="brutal-card p-6 border-l-4 border-l-brutal-orange overflow-x-auto">
+                <h3 class="text-base font-bold font-heading text-white mb-4 uppercase">> Strategy Savings Ledger</h3>
+                
+                <table class="w-full text-left font-mono text-xs text-brutal-muted border-collapse">
+                    <thead>
+                        <tr class="border-b border-brutal-border text-white">
+                            <th class="pb-3">OPTIMIZATION STRATEGY</th>
+                            <th class="pb-3">MECHANISM</th>
+                            <th class="pb-3 text-right">ESTIMATED TOKEN IMPACT</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-brutal-border">
+                        <tr>
+                            <td class="py-3 font-bold text-white">Directory Scoping & .claudeignore</td>
+                            <td class="py-3">Excluded `/dist`, build caches, and unneeded modules from the search index.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">-18,000 Input Tokens</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-white">1-Hour TTL Caching + Append-Only</td>
+                            <td class="py-3">Locked heavy system prefix; updated context without mutating the top prefix.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">88% Discount on Re-reads</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-white">RTK Proxy + Quiet Test Flags</td>
+                            <td class="py-3">Stripped 800+ lines of redundant passing test output before context insertion.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">-12,400 Input Tokens</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-white">Caveman Response Directives</td>
+                            <td class="py-3">Enforced zero preambles or conversational filler on assistant outputs.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">-350 Output Tokens (~48%)</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-white">Stateless Querying (/btw)</td>
+                            <td class="py-3">Answered RFC 7519 question without appending context to subsequent turns.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">Prevents Context Stack Decay</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-bold text-white">Cache-Safe In-Place /compact</td>
+                            <td class="py-3">Forked history with active prefix intact to summarize thread at 0.1x read rate.</td>
+                            <td class="py-3 text-right text-brutal-green font-bold">90% Discount on Summarization</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

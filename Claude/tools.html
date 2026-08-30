@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Lab · Agent Tools Lab</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration for Brutalist Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        heading: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brutal: {
+                            bg: '#0d0e12',
+                            card: '#14161d',
+                            border: '#232734',
+                            orange: '#ff9c2a',
+                            text: '#e2e8f0',
+                            muted: '#8a94a6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Brutalist Hub Styles -->
+    <style>
+        :root {
+            --bg: #0d0e12;
+            --card-bg: #14161d;
+            --card-border: #342d23;
+            --accent-main: #ff9c2a;
+            --text-main: #e2e8f0;
+            --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            padding: 2rem 1rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        header.hub-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; 
+        }
+
+        header.hub-header a { 
+            color: var(--text-muted); text-decoration: none; 
+            font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s;
+        }
+
+        header.hub-header a:hover { color: var(--accent-main); }
+
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
+        .brand-title b { color: var(--accent-main); }
+        
+        .brand-icon {
+            width: 22px; height: 22px; background-color: var(--accent-main);
+            -webkit-mask: url('redhat.svg') no-repeat center / contain;
+            mask: url('redhat.svg') no-repeat center / contain;
+        }
+
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        
+        .tab-btn { 
+            background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); 
+            padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+        }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+
+        /* Infographic Overrides */
+        .chart-box { 
+            position: relative; 
+            width: 100%; 
+            max-width: 650px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 320px; 
+            max-height: 380px; 
+        }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+        
+    </style>
+</head>
+<body class="selection:bg-brutal-orange selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <!-- HUB HEADER -->
+    <header class="hub-header">
+        <a href="../index.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CLAUDE <b>LAB</b>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <a href="index.html" class="tab-btn">01 CACHING</a>
+        <a href="caching-how-to.html" class="tab-btn ">01.5 HOW-TO</a>
+        <a href="tools.html" class="tab-btn active">02 TOOLS & SKILLS</a>
+        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
+        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-orange text-xs font-mono mb-6 uppercase">
+                <span>> Agent Ecosystem</span>
+            </div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                Modern Agent Wrappers
+            </h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">
+                Documentation and context patterns for modern agent wrappers (Caveman, RTK, Ponytail, CodeGraph). This lab breaks down how these tools handle resource footprint and data bloat during AI-driven development.
+            </p>
+        </div>
+        
+        <div class="space-y-12">
+            
+            <!-- Key Terms Section (Updated to match Main Tab layout) -->
+            <section id="terms" class="space-y-6">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/01</span> Key Terms
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                        <div class="text-sm font-bold text-white font-mono mb-2">MCP</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">Model Context Protocol: Tools that allow AI to interact with external systems, contributing to loaded session memory.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-orange">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Context Bloat</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">The dangerous accumulation of stale information or massive files sitting aimlessly in the agent's memory window.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Agentic Loop</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">The multi-step reasoning and planning cycle required for a model to execute complex code tasks autonomously.</p>
+                    </div>
+                    <div class="brutal-card p-5 border-l-2 border-l-brutal-text">
+                        <div class="text-sm font-bold text-white font-mono mb-2">Semantic Search</div>
+                        <p class="text-xs text-brutal-muted leading-relaxed">A search capability based on code meaning rather than exact string matching, used to locate relevant files efficiently.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Information Block: Deferred Tools -->
+            <section class="space-y-6 pt-8 mt-8 border-t border-brutal-border">
+                <div class="border border-brutal-orange p-6 bg-brutal-card relative">
+                    <div class="absolute -top-3 left-4 bg-brutal-card px-2 flex items-center gap-2 text-brutal-orange font-bold font-mono tracking-wider">
+                        <span class="bg-brutal-orange text-brutal-bg px-2">(i)</span> Deferred Tools
+                    </div>
+                    
+                    <p class="text-sm text-brutal-muted leading-relaxed mt-2 font-sans">
+                        A parameter (<code class="text-brutal-orange">defer_loading: true</code>) that allows developers to pass lightweight tool name "stubs" instead of massive JSON schemas. The schema expands locally only when searched for, preserving the cached prefix. Deferred tools cannot hold a cache breakpoint.
+                    </p>
+                    
+                    <!-- Visual Example -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 font-mono text-xs">
+                        
+                        <!-- Bloated Tool Example -->
+                        <div class="border border-brutal-border bg-brutal-bg p-4">
+                            <span class="text-brutal-muted uppercase block mb-2 border-b border-brutal-border pb-1">> Standard Payload (Heavy)</span>
+                            <pre class="text-brutal-muted mt-2 overflow-x-auto"><code>[
+  {
+    "name": "database_search",
+    "description": "Searches the SQL database...",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "query": { "type": "string" },
+        "limit": { "type": "integer" }
+        // ... 150 more lines of schema
+      }
+    }
+  }
+]</code></pre>
+                            <div class="mt-3 text-brutal-orange text-[10px]">> BUSTS CACHE IF UPDATED</div>
+                        </div>
+
+                        <!-- Deferred Tool Example -->
+                        <div class="border border-brutal-orange p-4 bg-brutal-bg relative shadow-[4px_4px_0_#ff9c2a]">
+                            <span class="text-brutal-orange uppercase block mb-2 border-b border-brutal-border pb-1">> Deferred Stub (Optimized)</span>
+                            <pre class="text-white mt-2 overflow-x-auto"><code>[
+  {
+    "name": "database_search",
+    "defer_loading": true
+  },
+  {
+    "name": "calculate_metrics",
+    "defer_loading": true
+  }
+]</code></pre>
+                            <div class="mt-3 text-green-400 text-[10px]">> PRESERVES STATIC PREFIX</div>
+                        </div>
+                    </div>
+
+                    <ul class="text-sm text-brutal-muted space-y-2 font-mono mt-6 border-t border-brutal-border pt-4">
+                        <li class="flex gap-2">
+                            <span class="text-brutal-orange">></span> 
+                            <span>When the agent decides it needs <code class="text-brutal-text">database_search</code>, it executes a native Tool Search to retrieve the full schema dynamically.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Tools Grid Section -->
+            <section id="tools" class="space-y-6 pt-6">
+                <div class="max-w-3xl mb-8">
+                    <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
+                        <span class="text-brutal-muted">/02</span> Wrapper Analysis
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 gap-12">
+                    <!-- 1. CodeGraph -->
+                    <article class="brutal-card">
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Left: Info & Commands -->
+                            <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-brutal-border">
+                                <h3 class="text-2xl font-heading text-brutal-orange mb-2 uppercase">1. CodeGraph</h3>
+                                <div class="inline-block border border-brutal-border px-2 py-1 mb-6 text-xs font-mono text-brutal-muted uppercase">Semantic Indexer</div>
+
+                                <h4 class="font-heading text-brutal-orange mb-1">> Definition & Research</h4>
+                                <p class="text-sm mb-4 text-brutal-muted">
+                                    CodeGraph allows an agent to semantically search and locate relevant files without reading the entire codebase, preventing unnecessary resource consumption. Instead of manual grepping, it uses a generated map initialized via the CLI.
+                                </p>
+
+                                <h4 class="font-heading text-white mb-1">> How to Use</h4>
+                                <p class="text-sm mb-6 text-brutal-muted leading-relaxed">
+                                    Run the initialization command at the root of your repository. This creates a lightweight semantic map of your codebase. When initializing your AI agent, pass the generated <code class="text-brutal-orange">codegraph.json</code> as a deferred tool. The agent will query this map instead of grepping massive directories.
+                                </p>
+                                
+                                <div class="bg-brutal-bg border border-brutal-border p-3 text-brutal-text font-mono text-sm mb-4">
+                                    <span class="text-brutal-orange mr-2">usr></span>npx @codegraph/cli init --watch
+                                </div>
+
+                                <h4 class="font-heading text-brutal-orange mb-1">> Trade-offs</h4>
+                                <ul class="space-y-2 text-sm text-brutal-muted">
+                                    <li>> Introduces a second source of truth. If the index becomes stale, the model will hallucinate file paths.</li>
+                                    <li>> Requires the <code class="text-brutal-text">--watch</code> daemon to run continuously in the background to prevent desyncing.</li>
+                                </ul>
+                                
+                            </div>
+                            
+                            <!-- Right: Chart -->
+                            <div class="p-6 lg:p-8 bg-brutal-bg flex flex-col justify-center">
+                                <h4 class="font-heading text-brutal-orange text-sm mb-4">> Context Footprint Comparison</h4>
+                                <div class="chart-box w-full">
+                                    <canvas id="chartCodeGraph"></canvas>
+                                </div>
+                                <p class="text-xs text-brutal-muted mt-4 font-mono text-center">Chart compares tool calls needed to locate a function definition.</p>
+                            </div>
+                        </div>
+                    </article>
+                   
+                    
+                    <!-- 2. RTK -->
+                    <article class="brutal-card">
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Left: Info & Commands -->
+                            <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-brutal-border">
+                                <h3 class="text-2xl font-heading text-brutal-orange mb-2 uppercase">2. RTK</h3>
+                                <div class="inline-block border border-brutal-border px-2 py-1 mb-6 text-xs font-mono text-brutal-muted uppercase">Rust CLI Proxy</div>
+                                
+                                <h4 class="font-heading text-brutal-orange mb-1">> Definition & Research</h4>
+                                <p class="text-sm mb-4 text-brutal-muted">
+                                    RTK is a Rust-based proxy that shrinks noisy CLI outputs and logs before they are read by the model. Research shows it relies on strategies like Truncation, Deduplication, and Smart Filtering to reduce input volume by 60-90% when running test suites or heavy grep queries.
+                                </p>
+
+                                
+                                <h4 class="font-heading text-white mb-1">> How to Use</h4>
+                                <p class="text-sm mb-6 text-brutal-muted leading-relaxed">
+                                    Instead of letting your agent run bash commands directly, force it to prepend commands with <code class="text-brutal-orange">rtk run --</code>. RTK intercepts the standard output, strips out boilerplate progress bars and passing tests, and feeds only the semantic errors back into the agent's context window.
+                                </p>
+
+                                <div class="bg-brutal-bg border border-brutal-border p-3 text-brutal-text font-mono text-sm mb-4">
+                                    <span class="text-brutal-orange mr-2">usr></span>cargo install rtk-proxy<br>
+                                    <span class="text-brutal-orange mr-2">usr></span>rtk run -- npm run test
+                                </div>
+
+                                <h4 class="font-heading text-brutal-orange mb-1">> Trade-offs</h4>
+                                <ul class="space-y-1 text-sm text-brutal-muted">
+                                    <li>> Compression is lossy; you might miss niche diagnostic warnings.</li>
+                                    <li>> Must be bypassed manually if the agent specifically needs full system logs for deep debugging.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Right: Visual Example -->
+                            <div class="p-6 lg:p-8 bg-brutal-bg flex flex-col justify-center">
+                                <h4 class="font-heading text-brutal-orange text-sm mb-4">> Visual Pipeline Example</h4>
+                                <div class="flex flex-col gap-4 font-mono text-xs">
+                                    <div class="border border-brutal-border p-4 bg-brutal-card">
+                                        <span class="text-brutal-muted uppercase block mb-2 font-bold">Standard Output [Raw]</span>
+                                        <div class="text-brutal-muted leading-relaxed">
+                                            PASS test/app.spec.ts<br>
+                                            PASS test/auth.spec.ts<br>
+                                            FAIL test/util.spec.ts (TypeError: undefined...)<br>
+                                            PASS test/db.spec.ts<br>
+                                            [... 150 more lines of boilerplate]
+                                        </div>
+                                    </div>
+                                    <div class="text-center text-brutal-orange font-bold text-lg opacity-75">↓</div>
+                                    <div class="border border-brutal-orange p-4 bg-brutal-card relative">
+                                        <span class="text-brutal-orange uppercase block mb-2 font-bold">RTK Compressed Output</span>
+                                        <div class="text-white leading-relaxed">
+                                            3 Passed | 1 Failed<br>
+                                            > util.spec.ts: TypeError: undefined is not a function
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 3. Caveman -->
+                    <article class="brutal-card">
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Left: Info & Commands -->
+                            <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-brutal-border">
+                                <h3 class="text-2xl font-heading text-brutal-orange mb-2 uppercase">3. Caveman</h3>
+                                <div class="inline-block border border-brutal-border px-2 py-1 mb-6 text-xs font-mono text-brutal-muted uppercase">Response Compressor</div>
+                                
+                                <h4 class="font-heading text-brutal-orange mb-1">> Definition & Research</h4>
+                                <p class="text-sm mb-4 text-brutal-muted">
+                                    Caveman mode reduces model verbosity to save footprint while maintaining core information quality. Our research identified 4 core compression layers utilized by the tool:
+                                </p>
+
+                                <h4 class="font-heading text-white mb-1">> How to Use</h4>
+                                <p class="text-sm mb-6 text-brutal-muted leading-relaxed">
+                                    Wrap your AI script execution with the Caveman CLI. It overrides the default system prompt to force absolute minimalism. The agent will stop generating conversational filler (e.g., "Certainly, I can help with that!") and is placed on a strict token budget for tool outputs, saving massive space in the chat history.
+                                </p>
+
+                                <div class="bg-brutal-bg border border-brutal-border p-3 text-brutal-text font-mono text-sm mb-4">
+                                    <span class="text-brutal-orange mr-2">usr></span>caveman start --mode=terse --budget=500
+                                </div>
+
+                                <h4 class="font-heading text-brutal-orange mb-1">> Trade-offs</h4>
+                                <ul class="space-y-1 text-sm text-brutal-muted">
+                                    <li>> Terse responses can degrade the model's "Chain of Thought" reasoning.</li>
+                                    <li>> Aggressive budgets can accidentally truncate vital code generations mid-function.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Right: Chart & Example -->
+                            <div class="p-6 lg:p-8 bg-brutal-bg flex flex-col justify-center">
+                                <h4 class="font-heading text-brutal-orange text-sm mb-4">> Verbosity Reduction</h4>
+                                <div class="grid grid-cols-2 gap-4 font-mono text-xs mb-6">
+                                    <div class="border border-brutal-border p-3 bg-brutal-card">
+                                        <span class="text-brutal-muted uppercase block mb-2 border-b border-brutal-border pb-1">Standard</span>
+                                        <p class="text-brutal-muted mt-2">> Certainly! Here is the function...</p>
+                                    </div>
+                                    <div class="border border-brutal-orange p-3 bg-brutal-card">
+                                        <span class="text-brutal-orange uppercase block mb-2 border-b border-brutal-border pb-1">Caveman</span>
+                                        <code class="block text-white mt-2">def rev(s): return s[::-1]</code>
+                                    </div>
+                                </div>
+                                <div class="chart-box w-full" style="height: 200px;">
+                                    <canvas id="chartCaveman"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 4. Ponytail -->
+                    <article class="brutal-card">
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Left: Info & Commands -->
+                            <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-brutal-border">
+                                <h3 class="text-2xl font-heading text-brutal-orange mb-2 uppercase">4. Ponytail</h3>
+                                <div class="inline-block border border-brutal-border px-2 py-1 mb-6 text-xs font-mono text-brutal-muted uppercase">Logic Minimalist</div>
+                                
+                                <h4 class="font-heading text-brutal-orange mb-1">> Definition & Research</h4>
+                                <p class="text-sm mb-4 text-brutal-muted">
+                                    Ponytail acts as a strict behavioral ruleset, forcing agents into a "lazy senior developer" mindset. It forces the agent to rely on native HTML/JS elements and existing codebases rather than aggressively generating boilerplate or installing heavy external NPM packages.
+                                </p>
+                                
+                                <h4 class="font-heading text-white mb-1">> How to Use</h4>
+                                <p class="text-sm mb-6 text-brutal-muted leading-relaxed">
+                                    Run the initialization script to inject the Ponytail behavioral ruleset into your agent framework. It forces the agent into a "lazy senior developer" mindset. When asked to build a feature, it must exhaust all native HTML/JS solutions before attempting to run `npm install` for an external dependency.
+                                </p>
+
+                                <div class="bg-brutal-bg border border-brutal-border p-3 text-brutal-text font-mono text-sm mb-4">
+                                    <span class="text-brutal-orange mr-2">usr></span>ponytail init --strict-native
+                                </div>
+
+                                <h4 class="font-heading text-brutal-orange mb-1">> Trade-offs</h4>
+                                <ul class="space-y-1 text-sm text-brutal-muted">
+                                    <li>> The agent may outright refuse to build highly custom UI components if a native fallback exists.</li>
+                                    <li>> Uses extra inference time debating whether to install a package or use native code.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Right: Ledger Example & Chart -->
+                            <div class="p-6 lg:p-8 bg-brutal-bg flex flex-col justify-center">
+                                <h4 class="font-heading text-brutal-orange text-sm mb-4">> Real-World Generation Footprint</h4>
+                                
+                                <div class="flex flex-col font-mono text-xs w-full mb-6">
+                                    <div class="bg-brutal-card border border-brutal-border p-3 mb-4 text-white">
+                                        <span class="text-brutal-orange mr-2">usr></span>"Add a date picker."
+                                    </div>
+
+                                    <!-- Top Box: Unconstrained -->
+                                    <div class="border border-brutal-border p-4 bg-brutal-card relative mb-3">
+                                        <span class="absolute -top-2.5 left-3 bg-brutal-card px-2 text-brutal-muted font-bold tracking-wider">UNCONSTRAINED</span>
+                                        <ul class="text-brutal-muted space-y-2 mt-2">
+                                            <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                                <span>> Execute setup</span> 
+                                                <code class="text-brutal-text">npm i flatpickr</code>
+                                            </li>
+                                            <li class="flex justify-between pb-1">
+                                                <span>> Context bloat</span> 
+                                                <span>+250kb deps</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Bottom Box: Ponytail -->
+                                    <div class="border border-brutal-orange p-4 bg-brutal-card relative">
+                                        <span class="absolute -top-2.5 left-3 bg-brutal-card text-brutal-orange px-2 font-bold tracking-wider">PONYTAIL OVERRIDE</span>
+                                        <ul class="text-white space-y-2 mt-2">
+                                            <li class="flex justify-between border-b border-brutal-border border-dashed pb-1">
+                                                <span>> Native fallback</span> 
+                                                <code class="text-brutal-orange">&lt;input type="date"&gt;</code>
+                                            </li>
+                                            <li class="flex justify-between pb-1">
+                                                <span>> Context bloat</span> 
+                                                <span class="text-brutal-orange font-bold">0 deps</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="chart-box w-full" style="height: 180px;">
+                                    <canvas id="chartPonytail"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        // Label wrapping logic for >16 Characters
+        function formatLabel(str, maxLen = 16) {
+            if (typeof str !== 'string' || str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxLen) {
+                    if (currentLine) lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine ? ' ' : '') + word;
+                }
+            });
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        }
+
+        // Chart Utilities & Brutalist Config
+        Chart.defaults.font.family = "'Fira Code', monospace";
+        Chart.defaults.color = '#8a94a6';
+        
+        const brutalChartOptions = {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { font: { size: 11 } } },
+                tooltip: { 
+                    backgroundColor: '#14161d', 
+                    titleColor: '#ff9c2a', 
+                    bodyColor: '#e2e8f0', 
+                    borderColor: '#232734', 
+                    borderWidth: 1, 
+                    cornerRadius: 0,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { grid: { color: '#232734' } },
+                y: { grid: { color: '#232734' } }
+            }
+        };
+
+        // Render CodeGraph Chart
+        const ctxCodeGraph = document.getElementById('chartCodeGraph').getContext('2d');
+        new Chart(ctxCodeGraph, {
+            type: 'bar',
+            data: {
+                labels: [
+                    formatLabel('Standard Grep & Read Approach'), 
+                    formatLabel('CodeGraph Semantic Search')
+                ],
+                datasets: [{
+                    label: 'Tool Calls Executed',
+                    data: [14, 1],
+                    backgroundColor: ['#232734', '#ff9c2a'],
+                    borderColor: ['#342d23', '#ff9c2a'],
+                    borderWidth: 1,
+                    borderRadius: 0 
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: brutalChartOptions.plugins,
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: '#232734', drawBorder: false },
+                        ticks: { stepSize: 5 }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: true, borderColor: '#232734' }
+                    }
+                }
+            }
+        });
+
+        // Render Caveman Chart
+        const ctxCaveman = document.getElementById('chartCaveman').getContext('2d');
+        new Chart(ctxCaveman, {
+            type: 'bar',
+            data: {
+                labels: [
+                    formatLabel('Default Coding Agent'), 
+                    formatLabel('Caveman Compression Mode')
+                ],
+                datasets: [{
+                    label: 'Words Generated Per Turn',
+                    data: [350, 45],
+                    backgroundColor: ['#232734', '#ff9c2a'],
+                    borderColor: ['#342d23', '#ff9c2a'],
+                    borderWidth: 1,
+                    borderRadius: 0 
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // Horizontal bar
+                plugins: brutalChartOptions.plugins,
+                scales: {
+                    x: { 
+                        beginAtZero: true, 
+                        grid: { color: '#232734', drawBorder: false }
+                    },
+                    y: {
+                        grid: { display: false, drawBorder: true, borderColor: '#232734' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
