@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Lab · Tips & Hacks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'], heading: ['Fira Code', 'monospace'] }, colors: { brutal: { bg: '#0d0e12', card: '#14161d', border: '#232734', accent: '#10a37f', text: '#e2e8f0', muted: '#8a94a6' } } } } }
+    </script>
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #10a37f; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-accent selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <header class="hub-header">
+        <a href="main.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CODEX <b>LAB</b>
+        </div>
+    </header>
+
+    <main class="space-y-12">
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold font-heading text-brutal-accent flex items-center gap-3"><span class="text-brutal-muted">/01</span> Essential Agent Hacks</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div class="bg-brutal-card border-l-4 border-l-brutal-accent p-6">
+                    <h3 class="text-base font-bold text-white font-mono mb-2 uppercase">Global .codexignore</h3>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">Block heavy, non-essential files from the agent's file reader by configuring ignore lists in your project root[cite: 1]. Lockfiles alone can consume 50,000+ tokens[cite: 1].</p>
+                    <ul class="text-xs font-mono text-brutal-muted space-y-1">
+                        <li>> Dependencies (node_modules/, vendor/, .venv/)[cite: 1]</li>
+                        <li>> Lockfiles (package-lock.json, yarn.lock, pnpm-lock.yaml)[cite: 1]</li>
+                        <li>> Build artifacts & maps (dist/, build/, *.map)[cite: 1]</li>
+                        <li>> Media & binaries (*.png, *.svg, *.pdf, *.sqlite)[cite: 1]</li>
+                    </ul>
+                </div>
+
+                <div class="bg-brutal-card border-l-4 border-l-white p-6">
+                    <h3 class="text-base font-bold text-white font-mono mb-2 uppercase">Terminal Log Piping</h3>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">Raw build or test failures often produce thousands of lines of redundant output[cite: 1]. Pipe terminal commands through log-pruning tools[cite: 1].</p>
+                    <div class="bg-[#0d0e12] border border-brutal-border p-3 font-mono text-xs text-white">
+                        <span class="text-brutal-muted"># Filter only error lines and the trailing stack trace</span><br>
+                        <span class="text-brutal-accent">npm test | grep -A 5 -B 2 "FAIL\|Error" | head -n 40</span>[cite: 1]
+                    </div>
+                </div>
+
+                <!-- Model Orchestration Tip -->
+                <div class="bg-brutal-card border-l-4 border-l-brutal-accent p-6">
+                    <h3 class="text-base font-bold text-white font-mono mb-2 uppercase">Delegation & Effort Tuning</h3>
+                    <p class="text-sm text-brutal-muted leading-relaxed mb-4">Stop using your most expensive model for every query. Pair specific models with strategic effort parameters to balance cost and capability.</p>
+                    <ul class="text-xs font-mono text-white space-y-2">
+                        <li class="border-b border-brutal-border border-dashed pb-2">
+                            <span class="text-brutal-accent">> The Orchestrator:</span> Use <code class="text-brutal-muted">GPT-5.6 Sol</code> to plan architecture or map complex workflows. It requires less "thinking" overhead to perform well.
+                        </li>
+                        <li class="pt-1">
+                            <span class="text-brutal-accent">> The Explorer:</span> Embed <code class="text-brutal-muted">GPT-5.6 Luna</code> for simple tasks, but force it to <code class="text-brutal-muted">xhigh</code> or <code class="text-brutal-muted">max</code> effort. The extended reasoning time drastically improves its baseline capability while remaining massively cheaper than Sol.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Additional Information Block: GPT-5.6 Family -->
+        <section class="space-y-6 pt-8 mt-8 border-t border-brutal-border">
+            <div class="border border-brutal-accent p-6 bg-brutal-card relative">
+                <div class="absolute -top-3 left-4 bg-brutal-card px-2 flex items-center gap-2 text-brutal-accent font-bold font-mono tracking-wider">
+                    <span class="bg-brutal-accent text-brutal-bg px-2">(i)</span> KNOW YOUR GPT-5.6 MODEL
+                </div>
+                
+                <p class="text-sm text-brutal-muted leading-relaxed mt-2 font-sans">
+                    The GPT-5.6 Codex family operates on a distinct naming convention based on Latin celestial bodies. Selecting the right model and effort combination is critical for token economy.
+                </p>
+                
+                <ul class="text-sm text-brutal-muted space-y-4 font-mono mt-4 border-t border-brutal-border pt-4">
+                    <li class="flex gap-3">
+                        <span class="text-brutal-accent mt-0.5">></span> 
+                        <span class="leading-relaxed">
+                            <span class="text-white font-bold">Sol (Sun):</span> The heavyweight orchestrator. Best for complex, end-to-end engineering tasks. Runs exceptionally well on <code class="text-brutal-text">high</code> or <code class="text-brutal-text">xhigh</code> effort. Very capable, but expensive ($30/1M output tokens).
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-brutal-accent mt-0.5">></span> 
+                        <span class="leading-relaxed">
+                            <span class="text-white font-bold">Terra (Earth):</span> The middle ground. Often recommended to skip in day-to-day workflows, as Sol is more capable and Luna offers similar performance for a fraction of the cost.
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-brutal-accent mt-0.5">></span> 
+                        <span class="leading-relaxed">
+                            <span class="text-white font-bold">Luna (Moon):</span> The fast, cheap explorer. Highly capable for daily coding implementations at an extremely low cost ($1.2/1M output tokens). 
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

@@ -79,19 +79,7 @@
             -webkit-mask: url('redhat.svg') no-repeat center / contain;
             mask: url('redhat.svg') no-repeat center / contain;
         }
-
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
-        
-        .tab-btn { 
-            background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); 
-            padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
-        }
-        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
-        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
 
         /* Infographic Overrides */
@@ -112,21 +100,12 @@
 
     <!-- HUB HEADER -->
     <header class="hub-header">
-        <a href="../index.html">← Back to Hub</a>
+        <a href="main.html">← Back to Hub</a>
         <div class="brand-title">
             <div class="brand-icon"></div>
             CLAUDE <b>LAB</b>
         </div>
     </header>
-
-    <!-- TAB NAVIGATION -->
-    <div class="tabs">
-        <a href="main.html" class="tab-btn">01 CACHING</a>
-        <a href="caching-how-to.html" class="tab-btn ">01.5 HOW-TO</a>
-        <a href="tools.html" class="tab-btn active">02 TOOLS & SKILLS</a>
-        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
-        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
-    </div>
 
     <main>
         <!-- Hero Section -->
@@ -144,7 +123,7 @@
         
         <div class="space-y-12">
             
-            <!-- Key Terms Section (Updated to match Main Tab layout) -->
+            <!-- Key Terms Section -->
             <section id="terms" class="space-y-6">
                 <div class="max-w-3xl">
                     <h2 class="text-2xl font-bold font-heading text-brutal-orange flex items-center gap-3">
