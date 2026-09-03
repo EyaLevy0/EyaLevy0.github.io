@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Lab · MCP & Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'], heading: ['Fira Code', 'monospace'] }, colors: { brutal: { bg: '#0d0e12', card: '#14161d', border: '#232734', accent: '#10a37f', text: '#e2e8f0', muted: '#8a94a6' } } } } }
+    </script>
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #10a37f; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        
+        .tabs { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .tab-btn { background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
+        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(16, 163, 127, 0.1); }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-accent selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <header class="hub-header">
+        <a href="main.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CODEX <b>LAB</b>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <a href="main.html" class="tab-btn">01 CORE PRINCIPLES</a>
+        <a href="tools.html" class="tab-btn active">02 MCP & TOOLS</a>
+        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
+        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
+    </div>
+
+    <main class="space-y-12">
+        <div class="bg-brutal-card border border-brutal-border">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-brutal-border">
+                    <h3 class="text-2xl font-heading text-brutal-accent mb-2 uppercase">1. AST Repo-Map MCP</h3>
+                    <div class="inline-block border border-brutal-border px-2 py-1 mb-6 text-xs font-mono text-brutal-muted uppercase">Context Reduction Server</div>
+                    <p class="text-sm mb-4 text-brutal-muted leading-relaxed">Instead of letting the agent read every source file directly, integrate an open-source MCP Server that generates a lightweight repository map using Tree-sitter[cite: 1].</p>
+                    <ul class="space-y-2 text-sm text-brutal-muted font-mono border-t border-brutal-border pt-4">
+                        <li>> <span class="text-white font-bold">Mechanism:</span> Parses codebase into an AST containing only class names, function signatures, and exports[cite: 1].</li>
+                        <li>> <span class="text-white font-bold">Impact:</span> Reduces codebase indexing context from ~100,000 tokens down to ~5,000–10,000 tokens per scan[cite: 1].</li>
+                    </ul>
+                </div>
+                <div class="p-6 lg:p-8 bg-[#0d0e12] flex flex-col justify-center">
+                    <h4 class="font-heading text-brutal-accent text-sm mb-4">> Context Comparison</h4>
+                    <div class="font-mono text-xs space-y-4">
+                        <div class="border border-brutal-border p-4 bg-brutal-card opacity-50">
+                            <span class="text-white uppercase block mb-1">Standard Output (100k Tokens)</span>
+                            <code class="text-brutal-muted">export const auth = (req, res) => {<br>&nbsp;&nbsp;// 50 lines of logic...<br>}</code>
+                        </div>
+                        <div class="border border-brutal-accent p-4 bg-brutal-card shadow-[4px_4px_0_#10a37f]">
+                            <span class="text-brutal-accent uppercase block mb-1">MCP AST Output (5k Tokens)</span>
+                            <code class="text-white">export const auth = (req, res) => void;</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

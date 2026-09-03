@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Lab · Session Walkthrough</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'], heading: ['Fira Code', 'monospace'] }, colors: { brutal: { bg: '#0d0e12', card: '#14161d', border: '#232734', accent: '#10a37f', text: '#e2e8f0', muted: '#8a94a6' } } } } }
+    </script>
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #10a37f; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-accent selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+    
+    <header class="hub-header">
+        <a href="main.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CODEX <b>LAB</b>
+        </div>
+    </header>
+    
+
+    <main class="space-y-12">
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold font-heading text-brutal-accent flex items-center gap-3"><span class="text-brutal-muted">/01</span> Execution Transcript</h2>
+            
+            <div class="border border-brutal-border bg-black font-mono text-xs space-y-6 p-6 overflow-x-auto">
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-accent">
+                        <span class="bg-brutal-accent text-black px-1 font-bold">TURN 01</span>
+                        <span class="text-brutal-muted">[Workspace Mapping]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-accent">usr></span> Analyze workspace and find the auth controller bug.
+                    </div>
+                    <div class="text-brutal-muted bg-[#0d0e12] p-3 border border-brutal-border space-y-1">
+                        <div class="text-white">> SYSTEM: Called MCP Server (AST Tree-sitter). Read 8,200 tokens. (Prevented 91,800 token raw dump).</div>
+                        <div class="mt-2">Found auth signature in `src/auth.ts`. Awaiting target modification instructions.</div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 border-b border-brutal-border pb-6">
+                    <div class="flex items-center gap-2 text-brutal-accent">
+                        <span class="bg-brutal-accent text-black px-1 font-bold">TURN 02</span>
+                        <span class="text-brutal-muted">[Log Truncation]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-accent">usr></span> npm test | grep -A 5 -B 2 "FAIL\|Error" | head -n 40
+                    </div>
+                    <div class="text-brutal-muted bg-[#0d0e12] p-3 border border-brutal-border space-y-1">
+                        <div class="text-white">> SYSTEM: Appended 40 lines of truncated stack trace to context. Bypassed 2,000 line terminal flood[cite: 1].</div>
+                        <div class="mt-2">Identified `TypeError: undefined is not a function` at line 42.</div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-brutal-accent">
+                        <span class="bg-brutal-accent text-black px-1 font-bold">TURN 03</span>
+                        <span class="text-brutal-muted">[Output Truncation]</span>
+                    </div>
+                    <div class="text-white bg-brutal-card p-3 border border-brutal-border">
+                        <span class="text-brutal-accent">usr></span> Fix the error. Return ONLY a unified diff patch. Do not rewrite the entire file[cite: 1].
+                    </div>
+                    <div class="text-brutal-muted bg-[#0d0e12] p-3 border border-brutal-border space-y-1">
+                        <div class="text-white">> SYSTEM: Generated 45 tokens. (Prevented 500+ token full file rewrite)[cite: 1].</div>
+                        <div class="text-brutal-accent mt-2">@@ -41,3 +41,3 @@<br>- const user = db.get(id)<br>+ const user = await db.get(id)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

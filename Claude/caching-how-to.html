@@ -40,11 +40,6 @@
         .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); }
         .brand-title b { color: var(--accent-main); }
         .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
-        
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
-        .tab-btn { background: var(--bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-decoration: none; }
-        .tab-btn:hover { border-color: var(--accent-main); color: var(--text-main); }
-        .tab-btn.active { border-color: var(--accent-main); color: var(--accent-main); background: rgba(255, 156, 42, 0.1); }
         .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
     </style>
 </head>
@@ -52,21 +47,13 @@
 
     <!-- HUB HEADER -->
     <header class="hub-header">
-        <a href="../index.html">← Back to Hub</a>
+        <a href="main.html">← Back to Hub</a>
         <div class="brand-title">
             <div class="brand-icon"></div>
             CLAUDE <b>LAB</b>
         </div>
     </header>
 
-    <!-- TAB NAVIGATION -->
-    <div class="tabs">
-        <a href="main.html" class="tab-btn">01 CACHING</a>
-        <a href="caching-how-to.html" class="tab-btn active">01.5 HOW-TO</a>
-        <a href="tools.html" class="tab-btn">02 TOOLS & SKILLS</a>
-        <a href="tips.html" class="tab-btn">03 TIPS & HACKS</a>
-        <a href="session.html" class="tab-btn">04 SESSION EXAMPLE</a>
-    </div>
 
     <main>
         <!-- Hero Section -->
@@ -109,50 +96,6 @@
                             Caching does not work on short prompts. You must meet a minimum token threshold, such as 1,024 tokens for Claude 3.5 Sonnet. If the prompt is too short, the API processes it normally.
                         </p>
                     </div>
-                </div>
-            </section>
-
-            <!-- Additional Information Block -->
-            <section class="space-y-6 pt-8 mt-8 border-t border-brutal-border">
-                <div class="border border-brutal-orange p-6 bg-brutal-card relative">
-                    <div class="absolute -top-3 left-4 bg-brutal-card px-2 flex items-center gap-2 text-brutal-orange font-bold font-mono tracking-wider">
-                        <span class="bg-brutal-orange text-brutal-bg px-2">(i)</span> KNOW YOUR MODEL
-                    </div>
-                    
-                    <p class="text-sm text-brutal-muted leading-relaxed mt-2 font-sans">
-                        Set your model and effort level before starting a task, as changing either one mid-conversation <span class="text-brutal-orange">invalidates the prompt cache</span> and increases costs.
-                    </p>
-                    
-                    <p class="text-sm text-brutal-muted leading-relaxed mt-4 font-sans">
-                        The Claude model ecosystem is tiered by computational capability, latency, and cost to address different architectural workloads:
-                    </p>
-                    
-                    <ul class="text-sm text-brutal-muted space-y-4 font-mono mt-4 border-t border-brutal-border pt-4">
-                        <li class="flex gap-3">
-                            <span class="text-brutal-orange mt-0.5">></span> 
-                            <span class="leading-relaxed">
-                                <span class="text-white font-bold">Claude Haiku:</span> The fastest and most cost-effective model in the lineup. It is engineered for near-instant latency, high-volume API requests, simple data classification, and lightweight agentic routing.
-                            </span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-brutal-orange mt-0.5">></span> 
-                            <span class="leading-relaxed">
-                                <span class="text-white font-bold">Claude Sonnet:</span> The optimized workhorse. It offers the best balance of speed and advanced intelligence, widely considered the default choice for software engineering, complex coding tasks, and multi-step autonomous workflows.
-                            </span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-brutal-orange mt-0.5">></span> 
-                            <span class="leading-relaxed">
-                                <span class="text-white font-bold">Claude Opus:</span> The heavyweight reasoning engine. It operates at a higher cost and lower speed but provides top-tier performance for highly complex logic, deep analytical tasks, and extended strategic planning.
-                            </span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-brutal-orange mt-0.5">></span> 
-                            <span class="leading-relaxed">
-                                <span class="text-white font-bold">Claude Fable:</span> A premium, highly specialized model tier designed for advanced narrative, nuanced behavioral emulation, and deeply complex contextual generation. Operating at the highest price point, it is reserved for extraordinary creative or specialized reasoning.
-                            </span>
-                        </li>
-                    </ul>
                 </div>
             </section>
 
@@ -251,37 +194,49 @@ User: Great, focus only on the European market.</textarea>
                     <span class="text-brutal-muted">/04</span> Guidelines
                 </h2>
                 
-                <div class="space-y-4">
+                <div class="space-y-4 max-w-4xl">
+        
                     <div class="brutal-card p-6 border-l-4 border-l-brutal-orange">
-                        <h3 class="text-base font-bold text-white font-mono mb-2">1. Front-Load Your Heavy Context:</h3>
-                        <p class="text-sm text-brutal-muted">Place your largest, most permanent data at the absolute beginning of your interaction. Instead of trickling in rules over multiple turns, provide your extensive reference files, API documentation, and overarching project instructions in your very first prompt so the system locks them into a stable prefix.</p>
-                    </div>
-                    
-                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
-                        <h3 class="text-base font-bold text-white font-mono mb-2">2. Adopt an Append-Only Mentality:</h3>
-                        <p class="text-sm text-brutal-muted">Once your baseline context is established, treat it as entirely immutable. If a local file changes or you need to adjust a rule, do not edit your initial system setup. Simply send a new message (e.g., "Update: I changed the CSS file locally, use this new version"), which safely adds to the history without destroying the foundational cache.</p>
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> RULE 01</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Static First, Dynamic Last</h3>
+                        <p class="text-sm text-brutal-muted">The cache checks from token zero. Place tool schemas and main instructions at the absolute top of the payload. Place volatile user messages at the very bottom. This ensures changes at the bottom do not invalidate the cached prefix at the top.</p>
                     </div>
 
                     <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
-                        <h3 class="text-base font-bold text-white font-mono mb-2">3. Ban Volatile Core Instructions:</h3>
-                        <p class="text-sm text-brutal-muted">Never inject dynamic variables, such as the current timestamp or rotating request IDs, into your project's custom instructions or system prompts. Because the caching engine relies on strict prefix matching from the very first byte, a changing variable instantly invalidates the entire cache chain.</p>
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> RULE 02</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Append Updates, Never Mutate</h3>
+                        <p class="text-sm text-brutal-muted">Never update a system prompt mid-session to inject timestamps or dynamic context. Changing a single byte in the system prompt breaks the entire cache chain. Always append new information as a distinct message at the end of the history array.</p>
                     </div>
 
                     <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
-                        <h3 class="text-base font-bold text-white font-mono mb-2">4. Summarize Long Threads In-Place:</h3>
-                        <p class="text-sm text-brutal-muted">As your chat history grows toward the context limit, do not start a brand-new session to clear the console. Instead, ask Claude to summarize the progress directly within the active thread. This allows the API to read the massive history at a 90% discount to generate the summary using cache-safe compaction.</p>
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> RULE 03</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Defer Heavy Tool Schemas</h3>
+                        <p class="text-sm text-brutal-muted">Sending full definitions for dozens of tools wastes prefix space and inflates the payload. Mark non-essential tools as lightweight stubs with <code class="text-brutal-orange">defer_loading: true</code> and rely on Tool Search to load them dynamically.</p>
                     </div>
 
                     <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
-                        <h3 class="text-base font-bold text-white font-mono mb-2">5. Defer Heavy Tools and Optimize TTL:</h3>
-                        <p class="text-sm text-brutal-muted">If you are utilizing agentic workflows with dozens of tools, pass lightweight tool names (stubs) and let the model search for the details when needed to keep the prefix perfectly stable. Furthermore, if you frequently pause to read code or think between prompts, configure a <code class="text-brutal-orange">1-hour Time-To-Live (TTL)</code> instead of the default 5-minute window to prevent your cache from expiring during your idle time.</p>
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> RULE 04</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Reuse State for Summaries</h3>
+                        <p class="text-sm text-brutal-muted">When generating session summaries, do not manually strip away the original system prompts to "save space." Send the summary request with the original history completely intact to secure the 90% read discount on the entire lookup.</p>
                     </div>
+
+                    <div class="brutal-card p-6 border-l-4 border-l-brutal-text">
+                        <div class="text-xs font-mono text-brutal-muted mb-2">> RULE 05</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-2">Economic TTL Routing</h3>
+                        <p class="text-sm text-brutal-muted">Default to a 5-minute TTL for automated agentic loops where API requests occur rapidly. Switch to a 1-hour extended TTL only for human-in-the-loop applications where users pause to read or think between queries.</p>
+                    </div>
+
                 </div>
+    
             </section>
             
-
-            
-        </div>
+        <!-- Module Progression -->
+            <div class="mt-16 pt-8 border-t border-brutal-border flex justify-start">
+                <a href="caching.html" class="inline-flex items-center gap-3 bg-brutal-bg text-brutal-text font-bold font-mono px-6 py-3 hover:border-brutal-orange hover:text-white transition-colors border border-brutal-border uppercase">
+                    <span class="text-lg leading-none">←</span>
+                    <span>Review Caching Analytics</span>
+                </a>
+            </div>
     </main>
 
 <!-- LOGIC SCRIPT -->

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Lab · Core Principles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'], heading: ['Fira Code', 'monospace'] },
+            colors: { brutal: { bg: '#0d0e12', card: '#14161d', border: '#232734', accent: '#10a37f', text: '#e2e8f0', muted: '#8a94a6' } } } }
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #0d0e12; --card-bg: #14161d; --card-border: #342d23;
+            --accent-main: #10a37f; --text-main: #e2e8f0; --text-muted: #8a94a6;
+            --font-mono: 'Fira Code', monospace; --font-sans: 'Inter', sans-serif;
+        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: var(--font-sans); padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+        header.hub-header { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 2rem; }
+        header.hub-header a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.9rem; transition: color 0.2s; }
+        header.hub-header a:hover { color: var(--accent-main); }
+        .brand-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        .brand-title b { color: var(--accent-main); }
+        .brand-icon { width: 22px; height: 22px; background-color: var(--accent-main); -webkit-mask: url('redhat.svg') no-repeat center / contain; mask: url('redhat.svg') no-repeat center / contain; }
+        .brutal-card { background: var(--card-bg); border: 1px solid var(--card-border); }
+    </style>
+</head>
+<body class="selection:bg-brutal-accent selection:text-white min-h-screen max-w-[1200px] mx-auto px-4 md:px-8">
+
+    <header class="hub-header">
+        <a href="main.html">← Back to Hub</a>
+        <div class="brand-title">
+            <div class="brand-icon"></div>
+            CODEX <b>LAB</b>
+        </div>
+    </header>
+
+    <main>
+        <div class="py-12 border-b border-brutal-border mb-12 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brutal-card border border-brutal-border text-brutal-accent text-xs font-mono mb-6 uppercase">> Optimization Vector</div>
+            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">Codex Token Hygiene</h1>
+            <p class="max-w-3xl mx-auto text-brutal-muted text-base leading-relaxed mb-10">When working with code agents, token consumption scales non-linearly due to context amplification, full file re-writing, and raw terminal flooding[cite: 1].</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto font-mono">
+                <div class="bg-brutal-card border border-brutal-border p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-accent mb-1">80%</div>
+                    <div class="text-xs font-bold text-white uppercase tracking-wider">Context Saved</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">Via AST Repo Maps</div>
+                </div>
+                <div class="bg-brutal-card border border-brutal-border p-5 text-center">
+                    <div class="text-3xl font-bold text-brutal-accent mb-1">50k+</div>
+                    <div class="text-xs font-bold text-white uppercase tracking-wider">Tokens Blocked</div>
+                    <div class="text-[11px] text-brutal-muted mt-2 border-t border-brutal-border pt-2">By ignoring lockfiles</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="space-y-6 mb-16">
+            <h2 class="text-2xl font-bold font-heading text-brutal-accent flex items-center gap-3"><span class="text-brutal-muted">/01</span> Optimization Principles</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-2 uppercase">> Principle A: Input Scoping</h3>
+                    <p class="text-xs text-brutal-muted leading-relaxed">Never allow the model to read entire repositories when only a fraction of the code is relevant[cite: 1]. Use explicit directory ignore rules and symbol-level references[cite: 1].</p>
+                </div>
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-2 uppercase">> Principle B: Skeletal Representation</h3>
+                    <p class="text-xs text-brutal-muted leading-relaxed">Pass structural interfaces, types, and function signatures (ASTs) rather than full implementation logic when explaining external dependencies[cite: 1].</p>
+                </div>
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-2 uppercase">> Principle C: Output Truncation</h3>
+                    <p class="text-xs text-brutal-muted leading-relaxed">Force the model to return unified diffs, line-targeted patches, or specific function overrides instead of rewriting whole files[cite: 1].</p>
+                </div>
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-2 uppercase">> Principle D: Session Hygiene</h3>
+                    <p class="text-xs text-brutal-muted leading-relaxed">Treat conversation context as volatile memory[cite: 1]. Regularly reset session history once a discrete sub-task is completed[cite: 1].</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold font-heading text-brutal-accent flex items-center gap-3"><span class="text-brutal-muted">/02</span> Analytics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">Workspace Token Bloat</h3>
+                    <div class="chart-box mt-4"><canvas id="chartBloat"></canvas></div>
+                </div>
+                <div class="bg-brutal-card border border-brutal-border p-6">
+                    <h3 class="text-sm font-bold text-white font-mono mb-1 uppercase">MCP Server Impact</h3>
+                    <div class="chart-box mt-4"><canvas id="chartImpact"></canvas></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        Chart.defaults.font.family = "'Fira Code', monospace";
+        Chart.defaults.color = '#8a94a6';
+        const opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#232734' } }, y: { grid: { color: '#232734' } } } };
+        
+        new Chart(document.getElementById('chartBloat').getContext('2d'), {
+            type: 'line', data: { labels: ['Turn 1', 'Turn 2', 'Turn 3', 'Turn 4', 'Turn 5'], datasets: [{ label: 'Raw Context', data: [20, 45, 80, 130, 200], borderColor: '#8a94a6', tension: 0.3 }, { label: 'Truncated Context', data: [20, 25, 30, 35, 40], borderColor: '#10a37f', tension: 0.3 }] }, options: opts
+        });
+        
+        new Chart(document.getElementById('chartImpact').getContext('2d'), {
+            type: 'bar', data: { labels: ['Full File Read', 'AST Repo-Map MCP'], datasets: [{ label: 'Tokens (k)', data: [100, 10], backgroundColor: ['#8a94a6', '#10a37f'], borderColor: '#14161d', borderWidth: 1 }] }, options: opts
+        });
+    </script>
+</body>
+</html>
